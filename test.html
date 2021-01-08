@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"> -->
+    <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/slate/bulmaswatch.min.css">
+    <title>Frontpage</title>
+    <style>
+        body {
+            font-size: 0.8em;
+            line-height: 1em;
+            font-weight: 600;
+        }
+
+        div.content {
+            box-shadow: -1px -1px 11px 8px grey;
+        }
+
+        .childcontent .tab-details ul>li:nth-child(2n) {
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 5px;
+        }
+
+        .tab-details ul {
+            display: block;
+            padding: 5px;
+        }
+
+        .tab-details ul li {
+            list-style: none;
+            margin-top: 5px;
+            padding: 2px;
+        }
+
+        a:visited {
+            color: palevioletred;
+        }
+
+        .child li {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" class="section">
+        <partabs>
+            <chitab title="Top News" :selected='true'>
+                <tabs>
+                    <tab name="uk" title="BBC" :selected='true'>
+                    </tab>
+                    <tab name="npr" title="NPR">
+                    </tab>
+                    <tab name="theguardian" title="Guardian">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Tech">
+                <tabs>
+                    <tab name="Technology" title="Tech" :selected='true'>
+                    </tab>
+                    <tab name="Programming" title="Programming">
+                    </tab>
+                    <tab name="Ycombinator" title="Hackernews">
+                    </tab>
+                    <tab name="Android" title="Android">
+                    </tab>
+                    <tab name="Techcrunch" title="TC">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Science">
+                <tabs>
+                    <tab name="Science" title="Science" :selected='true'>
+                    </tab>
+                    <tab name="Newscientist" title="NewScientist">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Nepal">
+                <tabs>
+                    <tab name="Nepal" title="Nepal" :selected='true'>
+                    </tab>
+                    <tab name="thehimalayantimes" title="THT">
+                    </tab>
+                    <tab name="onlinekhabar" title="Onlinekhabar">
+                    </tab>
+                    <tab name="setopati" title="Setopati">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Interesting">
+                <tabs>
+                    <tab name="DamnThatsInteresting" title="Interesting" :selected='true'>
+                    </tab>
+                    <tab name="PublicFreakout" title="Freakouts">
+                    </tab>
+                </tabs>
+            </chitab>
+        </partabs>
+    </div>
+    <script src="script/vue.js"></script>
+    <script src="script/test.js"></script>
+</body>
+
+</html>

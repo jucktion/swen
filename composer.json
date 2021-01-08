@@ -1,0 +1,9 @@
+{
+  "name": "swen/news-heroku",
+  "description": "PHP news with VueJS on Heroku",
+    "scripts": {
+      "post-install-cmd": [
+        "chmod 644 n/temp/"
+      ]
+    }
+}
