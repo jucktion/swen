@@ -3,7 +3,10 @@
   "description": "PHP news with VueJS on Heroku",
     "scripts": {
       "post-install-cmd": [
-        "chmod 644 n/temp/"
+        "chmod 644 temp"
       ]
+    },
+    "require": {
+      "php": "^8.0.0"
     }
 }
