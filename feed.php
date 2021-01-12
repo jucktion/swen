@@ -1,5 +1,5 @@
 <?php
-if ($_GET['k'] == 'banepa'){
+if (isset($_GET['k']) && $_GET['k'] == 'banepa'){
 include_once 'functions.php';
 if (isset($_GET['s'])) {
     $subs = $_GET['s'];
