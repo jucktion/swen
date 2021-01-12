@@ -27,13 +27,15 @@ function getUrl($base)
 }
 $arr = array();
 
+$refreshtime = 900; #time to check before updating cache
+
 #First level of reddit sub parsing, get the subs, run the related functions
 function parseReddit($subs)
 {
     foreach ($subs as $s) {
         $filename = 'temp/' . $s . '-parsed.json';
         if (file_exists($filename)) {
-            if (time() - filemtime($filename) > 6 * 3600) {
+            if (time() - filemtime($filename) > $refreshtime) {
                 try {
                     parseStore($s);
                 } catch (Exception $e) {
@@ -162,7 +164,7 @@ function parseFeed($feed, $domain = false, $test = false)
     //echo $domain;
     $filename = 'temp/' . $domain . '-parsed.json';
     if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 1800) {
+        if (time() - filemtime($filename) > $refreshtime) {
             try {
                 if ($test === true) {
                     parseXML($feed, $domain, true);
@@ -218,7 +220,7 @@ function parseQFX()
 {
     $filename = 'temp/qfx-parsed.json';
     if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 12 * 3600) {
+        if (time() - filemtime($filename) > 48 * $refreshtime) {
             QFX();
         }
     } else {
