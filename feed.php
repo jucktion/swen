@@ -1,4 +1,5 @@
 <?php
+if ($_GET['k'] == 'banepa'){
 include_once 'functions.php';
 if (isset($_GET['s'])) {
     $subs = $_GET['s'];
@@ -32,5 +33,6 @@ elseif (isset($_GET['f']) && isset($_GET['f'])) {
     parsefeed('https://www.setopati.com/feed');
     parsefeed('http://rssmix.com/u/9959139/rss.xml');
     parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
+}
 }
 #parseQFX();
