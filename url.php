@@ -2,9 +2,10 @@
 #print_r($_GET);
 if (isset($_GET['url'])){
     echo 'URL is set';
-    if (filter_var($_GET['url'], FILTER_VALIDATE_URL)){
+    $url = filter_var($_GET['url'], FILTER_SANITIZE_URL);
+    if (filter_var($url, FILTER_VALIDATE_URL)){
         include_once('functions.php');
-        $data = getUrl($_GET['url']);
+        $data = getUrl($url);
         if($data){
             echo $data;
         }
