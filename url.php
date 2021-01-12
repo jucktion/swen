@@ -1,7 +1,7 @@
 <?php
-if ($_GET['url'] && filter_var($_GET['url'], FILTER_VALIDATE_URL)){
+if ($_POST['url'] && filter_var($_POST['url'], FILTER_VALIDATE_URL)){
     include_once('functions.php');
-    $data = getUrl($_GET['url']);
+    $data = getUrl($_POST['url']);
     if($data){
         echo $data;
     }
