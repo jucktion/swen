@@ -7,7 +7,7 @@ if (isset($_GET['url'])){
     include_once('functions.php');
     $data = getUrl($url);
     if($data){
-        echo $data;
+        echo preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $data);
     }
     else{
         echo "Couldn\'t get anything";
