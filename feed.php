@@ -1,4 +1,5 @@
 <?php
+ini_set("max_execution_time", "600");
 if (isset($_GET['k']) && $_GET['k'] == 'banepa'){
 include_once 'functions.php';
 if (isset($_GET['s'])) {
@@ -24,7 +25,7 @@ elseif (isset($_GET['f']) && isset($_GET['f'])) {
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('https://rssmix.com/u/12292990/rss.xml', 'nature');
-    parseFeed('https://feeds.newscientist.com/home');
+    parseFeed('http://rssmix.com/u/12682389/rss.xml','newscientist');
     parsefeed('https://thehimalayantimes.com/category/nepal/feed/');
     parsefeed('https://feeds.bbci.co.uk/news/world/rss.xml');
     parsefeed('https://www.npr.org/rss/rss.php?id=1001');

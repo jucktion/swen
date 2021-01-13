@@ -27,7 +27,9 @@ function getUrl($base)
 }
 $arr = array();
 
-$refreshtime = 900; #time to check before updating cache
+#Isn't working for some reason
+global $refreshtime; 
+$refreshtime = 1717;#time to check before updating cache
 
 #First level of reddit sub parsing, get the subs, run the related functions
 function parseReddit($subs)
@@ -35,20 +37,21 @@ function parseReddit($subs)
     foreach ($subs as $s) {
         $filename = 'temp/' . $s . '-parsed.json';
         if (file_exists($filename)) {
-            if (time() - filemtime($filename) > $refreshtime) {
+            #echo $domain, 'Last updated ', time() - filemtime($filename) ,' Update when older than: ', $refreshtime ,' ';
+            if (time() - filemtime($filename) > 1717) {
                 try {
                     parseStore($s);
                 } catch (Exception $e) {
-                    echo "Error: ", $e->getMessage, '\n';
+                    echo "Error: ", $e->getMessage, '<br>';
                 }
             } else {
-                echo $domain, ' already updated';
+                echo $domain, ' already updated<br>';
             }
         } else {
             try {
                 parseStore($s);
             } catch (Exception $e) {
-                echo "Error: ", $e->getMessage, '\n';
+                echo "Error: ", $e->getMessage, '<br>';
             }
         }
     }
@@ -164,7 +167,7 @@ function parseFeed($feed, $domain = false, $test = false)
     //echo $domain;
     $filename = 'temp/' . $domain . '-parsed.json';
     if (file_exists($filename)) {
-        if (time() - filemtime($filename) > $refreshtime) {
+        if (time() - filemtime($filename) > 3600) {
             try {
                 if ($test === true) {
                     parseXML($feed, $domain, true);
@@ -173,7 +176,7 @@ function parseFeed($feed, $domain = false, $test = false)
                 echo $domain, " error: ", $e->getMessage, '<br>';
             }
         } else {
-            echo $domain, ' already updated';
+            echo $domain, ' already updated<br>';
         }
     } else {
         try {
@@ -220,7 +223,7 @@ function parseQFX()
 {
     $filename = 'temp/qfx-parsed.json';
     if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 48 * $refreshtime) {
+        if (time() - filemtime($filename) > 48 * 3600) {
             QFX();
         }
     } else {
