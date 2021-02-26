@@ -1,4 +1,5 @@
 <?php
+if (isset($_GET['k']) && $_GET['k'] == 'banepa'){
 include_once 'functions.php';
 include_once 'simple_html_dom.php';
 
@@ -82,10 +83,11 @@ function bbcnp(){
     // write_json($domain, $arr);
 }
 
-// kathmandupost();
-// himalayantimes();
-//bbcnp();
+kathmandupost();
+himalayantimes();
+bbcnp();
 parseQFX();
+}
 // $htmlNodes = $doc->getElementsByTagName('article');
 // foreach ($htmlNodes as $item){
 //     echo $item;
