@@ -7,7 +7,7 @@ if (isset($_GET['s'])) {
     parseStore($subs);
 }
 #Test individual feeds if the feeds aren't working when bulk processed
-elseif (isset($_GET['f']) && isset($_GET['f'])) {
+elseif (isset($_GET['f']) && isset($_GET['n'])) {
     if (filter_var($_GET['f'], FILTER_VALIDATE_URL)) {
         parseFeed($_GET['f'], filter_var($_GET['n'], FILTER_SANITIZE_STRING));
     } else {
@@ -25,8 +25,7 @@ elseif (isset($_GET['f']) && isset($_GET['f'])) {
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('https://rssmix.com/u/12292990/rss.xml', 'nature');
-    parseFeed('http://rssmix.com/u/12682389/rss.xml','newscientist');
-    parsefeed('https://thehimalayantimes.com/category/nepal/feed/');
+    parseFeed('http://feeds.feedburner.com/scienctistnew?format=xml','newscientist');
     parsefeed('https://feeds.bbci.co.uk/news/world/rss.xml');
     parsefeed('https://www.npr.org/rss/rss.php?id=1001');
     parsefeed('https://www.theguardian.com/world/rss');

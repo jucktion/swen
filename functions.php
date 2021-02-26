@@ -11,7 +11,7 @@ function getUrl($base)
     curl_setopt($ch, CURLOPT_REFERER, $base);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.106 Safari/537.36 Vivaldi/3.3.2022.45');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36');
     $str = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
@@ -45,7 +45,7 @@ function parseReddit($subs)
                     echo "Error: ", $e->getMessage, '<br>';
                 }
             } else {
-                echo $domain, ' already updated<br>';
+                echo 'already updated<br>';
             }
         } else {
             try {
@@ -144,6 +144,25 @@ function parseXML($feed, $domain, $test = false)
         }
     } else {
         echo $domain . " returned empty <br>";
+    }
+}
+
+//Write json file to temp folder
+function write_json($domain, $array){
+    $jd = json_encode($array);
+    $filename = 'temp/' . $domain . '-parsed.json';
+    if (file_exists($filename)) {
+        if (time() - filemtime($filename) > 3600) {
+            try {
+                file_put_contents($filename, $jd);
+                echo $domain . ': complete! <br>';
+            } catch (Exception $e) {
+                echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
+            }
+        }
+        else {
+            echo $domain, ' already updated<br>';
+        }
     }
 }
 
