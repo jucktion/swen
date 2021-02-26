@@ -163,6 +163,13 @@ function write_json($domain, $array){
         else {
             echo $domain, ' already updated<br>';
         }
+    }else{
+        try {
+            file_put_contents($filename, $jd);
+            echo $domain . ': complete! <br>';
+        } catch (Exception $e) {
+            echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
+        }
     }
 }
 
@@ -223,7 +230,7 @@ function QFX()
         //$date->sub(new DateInterval('PT4H3M2S'));
         $arr[$k]['title'] = (array_key_exists('eventTypeID', $v)) ? 'Coming Soon: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES) : 'Showing: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES);
         $arr[$k]['description'] = htmlspecialchars_decode($v['annotation'], ENT_QUOTES);
-        $arr[$k]['url'] = (isset($v['eventID'])) ? 'https://www.qfxcinemas.com/show?eventId=' . $v['eventID'] : '';
+        $arr[$k]['url'] = (isset($v['eventID'])) ? 'https://www.qfxcinemas.com/show?eventId=' . $v['eventID'] : '#';
         $arr[$k]['image'] = 'https://api.qfxcinemas.com/' . $v['bannerUrl'];
     }
     $jd = json_encode($arr);

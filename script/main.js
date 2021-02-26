@@ -23,7 +23,10 @@ function getContent(url, methodType = 'GET', callback) {
     }
     console.log("request sent succesfully");
 }
-
+function htmlDecode(str) {
+    const doc = new DOMParser().parseFromString(str, "text/html");
+    return doc.documentElement.textContent;
+}
 Vue.component('partabs', {
     template: `
     <div>
@@ -146,7 +149,7 @@ Vue.component('tab', {
     template: `
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link in this.linklist"><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{link.title}}</a> </li>
+        <li v-for="link in this.linklist"><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a> </li>
         </ul>
         <slot></slot>
     </div>

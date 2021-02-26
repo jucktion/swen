@@ -59,8 +59,33 @@ function himalayantimes(){
     write_json($domain, $arr);
 }
 
-kathmandupost();
-himalayantimes();
+//BBC
+function bbcnp(){
+    $data = getUrl('https://www.bbc.com/nepali');
+    $arr = array();
+
+    #echo $parsed;
+    $html = new simple_html_dom();
+
+    $html->load($data);
+    #var_dump($html);
+    foreach ($html->find('h3[class*="-Headline"]') as $k => $article) {
+        $title = $article->find('a',0)->plaintext;
+        $link = $article->find('a',0)->href;
+        echo $title,'<br>', $link,'<br><br>';
+
+        // $arr[$k]['title'] = $article->find('a',0)->plaintext;
+        // $arr[$k]['url'] = 'https://bbc.com'. $article->find('a',0)->href;
+        // echo $article->plaintext, '<br>';
+    }
+    // $domain = 'bbcnp';
+    // write_json($domain, $arr);
+}
+
+// kathmandupost();
+// himalayantimes();
+//bbcnp();
+parseQFX();
 // $htmlNodes = $doc->getElementsByTagName('article');
 // foreach ($htmlNodes as $item){
 //     echo $item;
