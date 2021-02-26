@@ -77,10 +77,10 @@ function bbcnp(){
 
         $arr[$k]['title'] = $article->find('a',0)->plaintext;
         $arr[$k]['url'] = 'https://bbc.com'. $article->find('a',0)->href;
-        echo $article->plaintext, '<br>';
+        // echo $article->plaintext, '<br>';
     }
-    // $domain = 'bbcnp';
-    // write_json($domain, $arr);
+    $domain = 'bbcnp';
+    write_json($domain, $arr);
 }
 
 kathmandupost();
