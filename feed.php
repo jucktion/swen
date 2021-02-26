@@ -21,7 +21,6 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     #parse RSS Feeds
     parseFeed('https://hnrss.org/frontpage', 'ycombinator');
     parseFeed('http://feeds.feedburner.com/TechCrunch?format=xml', 'techcrunch');
-    parseFeed('https://rss.app/feeds/37WXdDGVoDuI4hbA.xml', 'bbcnp');
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('https://rssmix.com/u/12292990/rss.xml', 'nature');
@@ -31,8 +30,8 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parsefeed('https://www.theguardian.com/world/rss');
     parsefeed('https://www.onlinekhabar.com/feed');
     parsefeed('https://www.setopati.com/feed');
-    parsefeed('http://rssmix.com/u/9959139/rss.xml');
+    parsefeed('http://rssmix.com/u/9959139/rss.xml','producthunt');
     parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
 }
 }
-#parseQFX();
+parseQFX();
