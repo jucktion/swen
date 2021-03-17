@@ -32,6 +32,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parsefeed('https://www.setopati.com/feed');
     parsefeed('http://rssmix.com/u/9959139/rss.xml','producthunt');
     parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
+    parsefeed('https://dev.to/feed/','devto');
+    parsefeed('https://www.freecodecamp.org/news/rss/','fcc');
 }
 }
-parseQFX();
