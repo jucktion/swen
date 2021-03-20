@@ -70,13 +70,14 @@ function bbcnp(){
 
     $html->load($data);
     #var_dump($html);
-    foreach ($html->find('h3[class*="-Headline"]') as $k => $article) {
+    #foreach ($html->find('h3[class*="-Headline"]') as $k => $article) {
+    foreach ($html->find('main h3 a[href*="/nepali/news-"]') as $k => $article) {
         // $title = $article->find('a',0)->plaintext;
         // $link = $article->find('a',0)->href;
         // echo $title,'<br>', $link,'<br><br>';
 
-        $arr[$k]['title'] = $article->find('a',0)->plaintext;
-        $arr[$k]['url'] = 'https://bbc.com'. $article->find('a',0)->href;
+        $arr[$k]['title'] = $article->plaintext;
+        $arr[$k]['url'] = 'https://bbc.com'. $article->href;
         // echo $article->plaintext, '<br>';
     }
     $domain = 'bbcnp';
