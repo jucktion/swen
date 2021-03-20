@@ -149,7 +149,7 @@ Vue.component('tab', {
     template: `
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link in this.linklist"><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a></li>
+        <li v-for="link,index in this.linklist"><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">✖</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -197,7 +197,10 @@ Vue.component('tab', {
                 // prompt('Copy', now.name+ now.linklist.length);
 
             }
-        }
+        },
+        remove (index) {
+            this.$delete(this.linklist, index)
+           }
     }
 });
 
