@@ -34,5 +34,6 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
     parsefeed('https://dev.to/feed/','devto');
     parsefeed('https://www.freecodecamp.org/news/rss/','fcc');
+    parsefeed('http://rssmix.com/u/12876876/rss.xml','positive');
 }
 }
