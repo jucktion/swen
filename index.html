@@ -40,6 +40,44 @@
             right: .8rem;
             cursor: pointer;
         }
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 3rem;
+            display: block;
+        }
+        .settings,.player {
+            position: relative;
+            background-color:#272b30;
+            border-radius: 100%;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            
+            margin: auto;
+            box-shadow: 0px 0px 5px 1px white;
+        }
+        .settings{
+            width: 2rem;
+            height: 2rem;
+            line-height: 2rem;
+        }
+        .player {
+            position: relative;
+            width: 3rem;
+            height: 3rem;
+            line-height: 3rem;
+        }
+        div#vsettings {
+            display:none;
+            background-color: white;
+            top: 50%;
+            width: 177px;
+            position: fixed;
+            left: 50%;
+            transform:translate(-50%, -50%)  ;
+            z-index: 99;
+        }
     </style>
 </head>
 
@@ -138,8 +176,35 @@
             </chitab>
         </partabs>
     </div>
-    <script src="script/vue.js"></script>
+    <div class="fab">
+        <div class="settings" onclick="showvoiceSettings()">⚙️</div>
+        <div class="player">▶</div>
+    </div>
+    <div id="vsettings">
+        <form>
+            <input type="text" class="txt">
+            <div>
+              <label for="rate">Rate</label><input type="range" min="0.5" max="2" value="1" step="0.1" id="rate">
+              <div class="rate-value">1</div>
+              <div class="clearfix"></div>
+            </div>
+            <div>
+              <label for="pitch">Pitch</label><input type="range" min="0" max="2" value="1" step="0.1" id="pitch">
+              <div class="pitch-value">1</div>
+              <div class="clearfix"></div>
+            </div>
+            <select>
+        
+            </select>
+            <div class="controls">
+              <button id="play" type="submit">Play</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <!-- <script src="script/vue.js"></script> -->
     <script src="script/main.js"></script>
+    <script src="script/voice.js"></script>
 </body>
 
 </html>

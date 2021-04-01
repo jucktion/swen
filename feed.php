@@ -1,6 +1,7 @@
 <?php
 ini_set("max_execution_time", "600");
 if (isset($_GET['k']) && $_GET['k'] == 'banepa'){
+$stime = microtime(true);
 include_once 'functions.php';
 if (isset($_GET['s'])) {
     $subs = $_GET['s'];
@@ -36,4 +37,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parsefeed('https://www.freecodecamp.org/news/rss/','fcc');
     parsefeed('http://rssmix.com/u/12876876/rss.xml','positive');
 }
+$etime = microtime(true);
+$exc_time = ($etime - $stime);
+echo "<p>Script ran in ".$exc_time." sec</p>";
 }
