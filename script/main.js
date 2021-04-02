@@ -6,7 +6,7 @@ function getContent(url, methodType = 'GET', callback) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log("xhr done successfully");
+                ////console.log("xhr done successfully");
                 var resp = xhr.responseText;
                 // var respJson = JSON.parse(resp);
                 // //console.log(respJson);
@@ -16,13 +16,13 @@ function getContent(url, methodType = 'GET', callback) {
                     callback.apply(xhr);
                 }
             } else {
-                console.log("xhr failed");
+               //// console.log("xhr failed");
             }
         } else {
-            console.log("xhr processing going on");
+           //// console.log("xhr processing going on");
         }
     }
-    console.log("request sent succesfully");
+    //// console.log("request sent succesfully");
 }
 function htmlDecode(str) {
     const doc = new DOMParser().parseFromString(str, "text/html");
@@ -141,6 +141,9 @@ Vue.component('tabs', {
                         tab.setData();
                     }
                 }
+                if (tab.isLoaded && tab.isActive){
+                    tab.setVoice();
+                }
             })
         }
     }
@@ -185,26 +188,123 @@ Vue.component('tab', {
         this.setData();
     },
     methods: {
-        setData() {
+        setData: function () {
             if (this.isActive) {
                 let now = this;
                 let filename = 'temp/' + this.name.toLowerCase() + '-parsed.json';
                 getContent(filename, 'GET', function () {
                     now.linklist = JSON.parse(this.responseText);
+                    //now.$root.$emit('voiceData',now.linklist);
+                    now.$root.voice = now.linklist;
                     //prompt(now.linklist);
                 });
+                
                 //this.linklist = now.linklist;
                 //prompt(this.linklist);
                 // prompt('Copy', now.name+ now.linklist.length);
 
             }
         },
-        remove (index) {
+        setVoice: function (){
+            if (this.isActive) {
+                //this.$root.$emit('svoiceData',this.linklist);
+                this.$root.voice = this.linklist;
+            }
+        },
+        remove: function (index) {
             this.$delete(this.linklist, index)
            }
     }
 });
+Vue.component('voice', {
+    template:`
+<div class="voice-section">
+<div class="fab">
+    <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
+    <div class="player" @click="loadVoices">▶</div>
+</div>
+<div v-if="settingsShown" id="vsettings">
+    <form>
+        <input type="text" class="txt">
+        <div>
+          <label for="rate">Rate</label><input type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
+          <div class="rate-value" v-text="rate">1</div>
+          <div class="clearfix"></div>
+        </div>
+        <div>
+          <label for="pitch">Pitch</label><input type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
+          <div class="pitch-value" v-text="pitch">1</div>
+          <div class="clearfix"></div>
+        </div>
+        <select  v-model="selectedVoice">
+        <option v-for="(voice,index) in this.voices" :value="index+1" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
+        </select>
+        <div class="controls">
+          <button id="play" type="submit">Play</button>
+        </div>
+    </form>
+</div>
+</div>
+    `,
+    data(){
+        return{
+            settingsShown: false,
+            speak: [],
+            pitch: 1,
+            rate: 1,
+            synth: window.speechSynthesis,
+            voices: [],
+            selectedVoice : 1
+
+        }
+    },
+    computed(){
+
+    },
+    mounted(){ 
+        this.loadVoices();
+    },
+    methods:{
+        loadVoices: function(){
+            //https://stackoverflow.com/a/52005323
+            function setSpeech() {
+                return new Promise(
+                    function (resolve, reject) {
+                        let synth = window.speechSynthesis;
+                        let id;
+            
+                        id = setInterval(() => {
+                            if (synth.getVoices().length !== 0) {
+                                resolve(synth.getVoices());
+                                clearInterval(id);
+                            }
+                        }, 10);
+                    }
+                )
+            }
+            let s = setSpeech();
+            //s.then((voices) => console.log(voices)); 
+            s.then((voices) => {
+                this.voices = this.synth.getVoices().sort(function (a, b) {
+                const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
+                if ( aname < bname ) return -1;
+                else if ( aname == bname ) return 0;
+                else return +1;
+                });
+                //this.voices.forEach(e=>{console.log(e.lang,e.name)});
+                this.speak = this.$root.voice;
+            });
+            
+        }
+    }
+
+});
 
 var vm = new Vue({
     el: '#app',
+    data(){
+        return {
+            voice:[]
+        }
+    }
 });
