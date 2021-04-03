@@ -221,7 +221,7 @@ Vue.component('voice', {
 <div class="voice-section">
 <div class="fab">
     <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
-    <div class="player" @click="loadVoices">▶</div>
+    <div class="player" @click="speaker">▶</div>
 </div>
 <div v-if="settingsShown" id="vsettings">
     <form>
@@ -237,7 +237,7 @@ Vue.component('voice', {
           <div class="clearfix"></div>
         </div>
         <select  v-model="selectedVoice">
-        <option v-for="(voice,index) in this.voices" :value="index+1" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
+        <option v-for="(voice,index) in this.voices" :value="index" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
         </select>
         <div class="controls">
           <button id="play" type="submit">Play</button>
@@ -254,7 +254,7 @@ Vue.component('voice', {
             rate: 1,
             synth: window.speechSynthesis,
             voices: [],
-            selectedVoice : 1
+            selectedVoice : 0
 
         }
     },
@@ -292,9 +292,31 @@ Vue.component('voice', {
                 else return +1;
                 });
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
-                this.speak = this.$root.voice;
             });
             
+        },
+        speaker:function(){
+            this.speak = this.$root.voice.map(x => x.title);
+            if (this.synth.speaking) {
+                this.synth.cancel();
+                console.error('speechSynthesis.speaking');
+                return;
+            }
+            if(this.speak !== ''){
+                var utterThis = new SpeechSynthesisUtterance(this.speak.join('.'));
+            }
+            utterThis.onend = function (event) {
+                console.log('SpeechSynthesisUtterance.onend');
+            }
+            utterThis.onerror = function (event) {
+                console.error('SpeechSynthesisUtterance.onerror');
+            }
+            utterThis.voice = this.voices[this.selectedVoice];
+            utterThis.pitch = this.pitch;
+            utterThis.rate = this.rate;
+
+            this.synth.speak(utterThis);
+
         }
     }
 
