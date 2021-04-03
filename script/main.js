@@ -195,7 +195,8 @@ Vue.component('tab', {
                 getContent(filename, 'GET', function () {
                     now.linklist = JSON.parse(this.responseText);
                     //now.$root.$emit('voiceData',now.linklist);
-                    now.$root.voice = now.linklist;
+                    //loads the first tab of last root level tab to root voice tab
+                    //now.$root.voice = now.linklist;
                     //prompt(now.linklist);
                 });
                 
@@ -221,26 +222,21 @@ Vue.component('voice', {
 <div class="voice-section">
 <div class="fab">
     <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
-    <div class="player" @click="speaker">▶</div>
+
+    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop">⏹</span><span @click="speaker" class="play" v-text="playpause">▶</span></div>
 </div>
 <div v-if="settingsShown" id="vsettings">
     <form>
-        <input type="text" class="txt">
-        <div>
-          <label for="rate">Rate</label><input type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
-          <div class="rate-value" v-text="rate">1</div>
-          <div class="clearfix"></div>
-        </div>
-        <div>
-          <label for="pitch">Pitch</label><input type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
-          <div class="pitch-value" v-text="pitch">1</div>
-          <div class="clearfix"></div>
-        </div>
         <select  v-model="selectedVoice">
         <option v-for="(voice,index) in this.voices" :value="index" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
         </select>
-        <div class="controls">
-          <button id="play" type="submit">Play</button>
+        <div>
+          <label for="rate">Rate</label><input type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
+          <span class="rate-value" v-text="rate">1</span>
+        </div>
+        <div>
+          <label for="pitch">Pitch</label><input type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
+          <span class="pitch-value" v-text="pitch">1</span>
         </div>
     </form>
 </div>
@@ -249,6 +245,8 @@ Vue.component('voice', {
     data(){
         return{
             settingsShown: false,
+            stopShown: false,
+            playpause: '▶',
             speak: [],
             pitch: 1,
             rate: 1,
@@ -258,11 +256,9 @@ Vue.component('voice', {
 
         }
     },
-    computed(){
-
-    },
     mounted(){ 
         this.loadVoices();
+        this.synth.cancel();
     },
     methods:{
         loadVoices: function(){
@@ -296,27 +292,46 @@ Vue.component('voice', {
             
         },
         speaker:function(){
+            //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
             this.speak = this.$root.voice.map(x => x.title);
-            if (this.synth.speaking) {
-                this.synth.cancel();
-                console.error('speechSynthesis.speaking');
+            if (this.synth.speaking && !this.synth.paused) {
+                this.synth.pause();
+                this.playpause = '▶';
+                console.log('speechSynthesis.paused');
                 return;
             }
-            if(this.speak !== ''){
-                var utterThis = new SpeechSynthesisUtterance(this.speak.join('.'));
+            if (this.synth.paused && this.synth.speaking) {
+                this.synth.resume();
+                this.playpause = '▶';
+                console.log('speechSynthesis.resumed');
+                return;
             }
-            utterThis.onend = function (event) {
-                console.log('SpeechSynthesisUtterance.onend');
+            if(this.speak.length > 0){
+                var utterThis = new SpeechSynthesisUtterance(this.speak.join('. '));
+                this.stopShown = true;
+            
+                    utterThis.onend = function (event) {
+                        console.log('SpeechSynthesisUtterance.onend');
+                    }
+                    utterThis.onerror = function (event) {
+                        console.error('SpeechSynthesisUtterance.onerror');
+                    }
+                    utterThis.voice = this.voices[this.selectedVoice];
+                    utterThis.pitch = this.pitch;
+                    utterThis.rate = this.rate;
+                    this.playpause = '⏸';
+                    this.synth.speak(utterThis);
             }
-            utterThis.onerror = function (event) {
-                console.error('SpeechSynthesisUtterance.onerror');
-            }
-            utterThis.voice = this.voices[this.selectedVoice];
-            utterThis.pitch = this.pitch;
-            utterThis.rate = this.rate;
 
-            this.synth.speak(utterThis);
-
+        },
+        stopSpeak:function(){
+            if (this.synth.speaking) {
+                this.synth.cancel();
+                this.playpause = '▶';
+                this.stopShown = false;
+                //console.error('speechSynthesis.speaking');
+                return;
+            }
         }
     }
 
