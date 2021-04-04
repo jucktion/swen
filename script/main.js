@@ -141,7 +141,7 @@ Vue.component('tabs', {
                         tab.setData();
                     }
                 }
-                if (tab.isLoaded && tab.isActive){
+                if (tab.isLoaded && tab.isActive && tab.current){
                     tab.setVoice();
                 }
             })
@@ -314,8 +314,9 @@ Vue.component('voice', {
             if(this.speak.length > 0){
                 var utterThis = new SpeechSynthesisUtterance(this.speak.join('. '));
                 this.stopShown = true;
-            
+                    now = this;
                     utterThis.onend = function (event) {
+                        now.stopSpeak();
                         console.log('SpeechSynthesisUtterance.onend');
                     }
                     utterThis.onerror = function (event) {
@@ -330,13 +331,10 @@ Vue.component('voice', {
 
         },
         stopSpeak:function(){
-            if (this.synth.speaking) {
                 this.synth.cancel();
                 this.playpause = '▶';
                 this.stopShown = false;
                 //console.error('speechSynthesis.speaking');
-                return;
-            }
         }
     }
 
