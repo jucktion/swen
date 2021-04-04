@@ -141,10 +141,13 @@ Vue.component('tabs', {
                         tab.setData();
                     }
                 }
-                if (tab.isLoaded && tab.isActive && tab.current){
-                    tab.setVoice();
+                if(tab.name == selectedtab.name){
+                    tab.current = true;
+                    if (tab.isLoaded && tab.isActive && tab.current){
+                        tab.setVoice();
+                    }
                 }
-            })
+            });
         }
     }
 });
@@ -204,7 +207,7 @@ Vue.component('tab', {
                     //now.$root.voice = now.linklist;
                     //prompt(now.linklist);
                 });
-                this.current = true;
+                // this.current = true;
                 //this.linklist = now.linklist;
                 //prompt(this.linklist);
                 // prompt('Copy', now.name+ now.linklist.length);
