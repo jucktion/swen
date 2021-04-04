@@ -168,15 +168,15 @@ Vue.component('tab', {
         title: {
             required: true
         },
-        current:{
+        voice:{
             default:false
         }
-
     },
     data() {
         return {
             isActive: false,
             isLoaded: false,
+            current: this.voice,
             linklist: []
         }
     },
