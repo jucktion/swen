@@ -24,10 +24,7 @@ function getContent(url, methodType = 'GET', callback) {
     }
     //// console.log("request sent succesfully");
 }
-function htmlDecode(str) {
-    const doc = new DOMParser().parseFromString(str, "text/html");
-    return doc.documentElement.textContent;
-}
+
 Vue.component('partabs', {
     template: `
     <div>
@@ -223,7 +220,12 @@ Vue.component('tab', {
         },
         remove: function (index) {
             this.$delete(this.linklist, index)
-           }
+        },
+        htmlDecode: function (str) {
+            const doc = new DOMParser().parseFromString(str, "text/html");
+            return doc.documentElement.textContent;
+        }
+           
     }
 });
 Vue.component('voice', {
