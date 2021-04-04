@@ -167,6 +167,9 @@ Vue.component('tab', {
         },
         title: {
             required: true
+        },
+        current:{
+            default:false
         }
 
     },
@@ -183,6 +186,8 @@ Vue.component('tab', {
     updated() {
         if (this.linklist.length != 0)
             this.isLoaded = true;
+        if(this.current)
+            this.setVoice();
     },
     beforeMount() {
         this.setData();
@@ -199,7 +204,7 @@ Vue.component('tab', {
                     //now.$root.voice = now.linklist;
                     //prompt(now.linklist);
                 });
-                
+                this.current = true;
                 //this.linklist = now.linklist;
                 //prompt(this.linklist);
                 // prompt('Copy', now.name+ now.linklist.length);
@@ -207,7 +212,7 @@ Vue.component('tab', {
             }
         },
         setVoice: function (){
-            if (this.isActive) {
+            if (this.current && this.isActive) {
                 //this.$root.$emit('svoiceData',this.linklist);
                 this.$root.voice = this.linklist;
             }
