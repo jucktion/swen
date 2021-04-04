@@ -184,6 +184,7 @@ Vue.component('tab', {
         }
     },
     created() {
+        //comment this line so all tab and voice load only when they are clicked
         this.isActive = this.selected;
     },
     updated() {
