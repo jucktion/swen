@@ -278,10 +278,15 @@ Vue.component('voice', {
 
         }
     },
-    mounted(){ 
-        this.loadVoices();
-        this.synth.cancel();
-        window.addEventListener('scroll', this.onScroll);
+    mounted(){
+        //check if browser support speech synthesis
+        if ('speechSynthesis' in window){
+            this.loadVoices();
+            this.synth.cancel();
+            window.addEventListener('scroll', this.onScroll);
+        }else{
+            this.showFab = false;
+        }
     },
     beforeDestroy () {
         window.removeEventListener('scroll', this.onScroll)
