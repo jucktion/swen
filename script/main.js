@@ -1,4 +1,4 @@
-Vue.config.devtools = true;
+//Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
