@@ -243,11 +243,14 @@ Vue.component('voice', {
         </select>
         <div>
           <label for="rate">Rate</label><input type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
-          <span class="rate-value" v-text="rate">1</span>
+          <span v-text="rate">1</span>
         </div>
         <div>
           <label for="pitch">Pitch</label><input type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
-          <span class="pitch-value" v-text="pitch">1</span>
+          <span v-text="pitch">1</span>
+        </div>
+        <div>
+        <label for="separator">Separator</label><input v-model="separator" type="separator" :value='separator'></input>
         </div>
     </form>
 </div>
@@ -261,6 +264,7 @@ Vue.component('voice', {
             speak: [],
             pitch: 1,
             rate: 1,
+            separator: '.... and in other news ....',
             synth: window.speechSynthesis,
             voices: [],
             selectedVoice : 0
@@ -318,7 +322,7 @@ Vue.component('voice', {
                 return;
             }
             if(this.speak.length > 0){
-                var utterThis = new SpeechSynthesisUtterance(this.speak.join('. '));
+                var utterThis = new SpeechSynthesisUtterance(this.speak.join(this.separator));
                 this.stopShown = true;
                     now = this;
                     utterThis.onend = function (event) {
