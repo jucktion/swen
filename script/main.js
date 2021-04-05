@@ -253,8 +253,8 @@ Vue.component('voice', {
         <label for="separator">Separator</label><input v-model="separator" :value='separator'></input>
         </div>
         <div>
-        <label for="startItem">Start</label><input v-model="startItem" :value='startItem' size="3"></input>
-        <label for="endItem">End</label><input v-model="endItem" :value='endItem' size="3"></input>
+        <label for="startItem">Start</label><input v-model.number="startItem" type="number" min="1" max="99" :value='startItem' size="2"></input>
+        <label for="endItem">End</label><input v-model.number="endItem" type="number" min="2" max="100" :value='endItem' size="2"></input>
         </div>
     </form>
 </div>
