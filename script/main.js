@@ -307,12 +307,7 @@ Vue.component('voice', {
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
             s.then((voices) => {
-                this.voices = this.synth.getVoices().sort(function (a, b) {
-                const aname = a.name.toUpperCase(), bname = b.name.toUpperCase();
-                if ( aname < bname ) return -1;
-                else if ( aname == bname ) return 0;
-                else return +1;
-                });
+                this.voices = this.synth.getVoices();
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
             });
             
