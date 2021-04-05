@@ -230,7 +230,7 @@ Vue.component('tab', {
 });
 Vue.component('voice', {
     template:`
-<div class="voice-section">
+<div v-show="showFab" class="voice-section">
 <div class="fab">
     <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
 
@@ -260,6 +260,7 @@ Vue.component('voice', {
         return{
             settingsShown: false,
             stopShown: false,
+            showFab: true,
             playpause: '▶',
             speak: [],
             pitch: 1,
@@ -274,6 +275,10 @@ Vue.component('voice', {
     mounted(){ 
         this.loadVoices();
         this.synth.cancel();
+        window.addEventListener('scroll', this.onScroll);
+    },
+    beforeDestroy () {
+        window.removeEventListener('scroll', this.onScroll)
     },
     methods:{
         loadVoices: function(){
@@ -345,6 +350,9 @@ Vue.component('voice', {
                 this.playpause = '▶';
                 this.stopShown = false;
                 //console.error('speechSynthesis.speaking');
+        },
+        onScroll: function(){
+            this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
         }
     }
 
