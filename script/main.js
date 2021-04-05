@@ -250,7 +250,11 @@ Vue.component('voice', {
           <span v-text="pitch">1</span>
         </div>
         <div>
-        <label for="separator">Separator</label><input v-model="separator" type="separator" :value='separator'></input>
+        <label for="separator">Separator</label><input v-model="separator" :value='separator'></input>
+        </div>
+        <div>
+        <label for="startItem">Start</label><input v-model="startItem" :value='startItem' size="3"></input>
+        <label for="endItem">End</label><input v-model="endItem" :value='endItem' size="3"></input>
         </div>
     </form>
 </div>
@@ -268,7 +272,9 @@ Vue.component('voice', {
             separator: '.... and in other news ....',
             synth: window.speechSynthesis,
             voices: [],
-            selectedVoice : 0
+            selectedVoice : 0,
+            startItem: 1,
+            endItem: 25
 
         }
     },
@@ -327,7 +333,7 @@ Vue.component('voice', {
                 return;
             }
             if(this.speak.length > 0){
-                let utterThis = new SpeechSynthesisUtterance(this.speak.join(this.separator));
+                let utterThis = new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));
                 this.stopShown = true;
                     now = this;
                     utterThis.onend = function (event) {
