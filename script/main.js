@@ -1,13 +1,13 @@
 Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
     xhr.send();
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 ////console.log("xhr done successfully");
-                var resp = xhr.responseText;
+                let resp = xhr.responseText;
                 // var respJson = JSON.parse(resp);
                 // //console.log(respJson);
                 // return respJson;
@@ -327,7 +327,7 @@ Vue.component('voice', {
                 return;
             }
             if(this.speak.length > 0){
-                var utterThis = new SpeechSynthesisUtterance(this.speak.join(this.separator));
+                let utterThis = new SpeechSynthesisUtterance(this.speak.join(this.separator));
                 this.stopShown = true;
                     now = this;
                     utterThis.onend = function (event) {
@@ -358,7 +358,7 @@ Vue.component('voice', {
 
 });
 
-var vm = new Vue({
+let vm = new Vue({
     el: '#app',
     data(){
         return {
