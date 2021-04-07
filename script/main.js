@@ -47,23 +47,20 @@ Vue.component('partabs', {
     created() {
         this.chitabs = this.$children;
     },
-    mounted() {
-        // this.chitabs.forEach(tab => {
-        //     if (tab.$children[0].$children[0].isActive) {
-        //         //tab.$children[0].$children[0].isLoaded = true;
-        //         tab.$children[0].$children[0].setData();
-        //     }
-        // });
-    },
     methods: {
         selectTab: function (selectedtab) {
             this.chitabs.forEach(tab => {
                     tab.isActive = (tab.title == selectedtab.title);
+                    //
+                    //  This simulates function execution, one after another through the heirarchy
+                    //1. Loops through titles on 'chitab' component, if it matches the one clicked
+                    //  a.Executes the setChildActive() function in 'chitab' component
+                    //2. setChildActive() then follows through to execute selectDef() function on the first child in 'tabs' component
+                    //  a.selectDef uses the selectTab() function with the first child element of its 'tab' component
+                    //  b.which simulates clicking of the first tab in the 'tab' component
+                    //
                     if(tab.title == selectedtab.title)
                         tab.setChildActive();
-                //tab.$children[0].isActive = true;
-                //tab.$children[0].$children[0].$children.isActive = true;
-                //prompt('', tab.$children[0].$children[0].title)
             });
         }
     }
@@ -91,15 +88,9 @@ Vue.component('chitab', {
     mounted() {
         this.isActive = this.selected;
     },
-    updated(){
-        //console.log(this.$children[0].name,this.title)
-        //this.$children[0].isActive = this.isActive && (this.$children[0].name == this.title)
-    },
     methods:{   
         setChildActive: function(){
-            console.log(this.$children[0].name)
-            this.$children[0].selectDef()
-            this.$children[0].selected = this.isActive && (this.$children[0].name == this.title)
+            this.$children[0].selectDef();
         }
     }
 });
@@ -117,11 +108,6 @@ Vue.component('tabs', {
         </div>
     </div>
     `,
-    props: {
-        name: {
-            required: true
-        }
-    },
     data() {
         return {
             tabs: [],
@@ -136,10 +122,7 @@ Vue.component('tabs', {
             this.tabs.forEach(tab => {
                 tab.isActive = (tab.name == selectedtab.name);
                 if (!tab.isLoaded) {
-                    //filename = '/temp/' + tab.name.toLowerCase() + '-parsed.json';
                     if (tab.name == selectedtab.name) {
-                        //createContent(filename, tab.name.toLowerCase());
-                        //tab.isLoaded = true;
                         tab.setData();
                     }
                 }
@@ -152,14 +135,9 @@ Vue.component('tabs', {
             });
         },
         selectDef:function(){
-            console.log('run selectDef')
-            console.log(this.name,this.$children[0].name)
-            this.selectTab(this.$children[0])
-            // if (this.name == this.$children[0].name){
-            //     console.log(this.$children[0])
-            //     this.selectTab(this.$children[0])
-            // }
-
+            console.log('run selectDef');
+            //console.log(this.name,this.$children[0].name)
+            this.selectTab(this.$children[0]);
         }
     }
 });
@@ -199,22 +177,22 @@ Vue.component('tab', {
         //comment this line so all tab and voice load only when they are clicked
         this.isActive = this.selected;
     },
-    beforeUpdate() {
-        console.log(this.$parent.name, this.$parent.isActive)
-        if(this.$parent.isActive && this.isActive && !this.isLoaded){
-            //console.log(this)
+    updated() {
+        //runs twice, needs debug
+        //console.log('@tab:updated',this.name, this.$parent.isActive)
+        if (this.$parent.isActive && this.isActive && !this.isLoaded){
             this.current = true;
             this.setData();
             this.setVoice();
         }
         if (this.linklist.length != 0)
             this.isLoaded = true;
-        if(this.current)
+        if (this.current)
             this.setVoice();
     },
     beforeMount() {
-        if(!this.isLoaded)
-        this.setData();
+        if (!this.isLoaded)
+            this.setData();
     },
     methods: {
         setData: function () {
@@ -223,21 +201,12 @@ Vue.component('tab', {
                 let filename = 'temp/' + this.name.toLowerCase() + '-parsed.json';
                 getContent(filename, 'GET', function () {
                     now.linklist = JSON.parse(this.responseText);
-                    //now.$root.$emit('voiceData',now.linklist);
-                    //loads the first tab of last root level tab to root voice tab
-                    //now.$root.voice = now.linklist;
                     //prompt(now.linklist);
                 });
-                // this.current = true;
-                //this.linklist = now.linklist;
-                //prompt(this.linklist);
-                // prompt('Copy', now.name+ now.linklist.length);
-
             }
         },
         setVoice: function (){
             if (this.current && this.isActive) {
-                //this.$root.$emit('svoiceData',this.linklist);
                 this.$root.voice = this.linklist;
             }
         },
