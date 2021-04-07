@@ -1,4 +1,4 @@
-Vue.config.devtools = true;
+//Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -135,7 +135,7 @@ Vue.component('tabs', {
             });
         },
         selectDef:function(){
-            console.log('run selectDef');
+            //console.log('run selectDef');
             //console.log(this.name,this.$children[0].name)
             this.selectTab(this.$children[0]);
         }
@@ -315,13 +315,13 @@ Vue.component('voice', {
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
                 this.playpause = '▶';
-                console.log('speechSynthesis.paused');
+                //console.log('speechSynthesis.paused');
                 return;
             }
             if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
                 this.playpause = '▶';
-                console.log('speechSynthesis.resumed');
+                //console.log('speechSynthesis.resumed');
                 return;
             }
             if(this.speak.length > 0){
@@ -330,7 +330,7 @@ Vue.component('voice', {
                     now = this;
                     utterThis.onend = function (event) {
                         now.stopSpeak();
-                        console.log('SpeechSynthesisUtterance.onend');
+                        //console.log('SpeechSynthesisUtterance.onend');
                     }
                     utterThis.onerror = function (event) {
                         console.error('SpeechSynthesisUtterance.onerror');
