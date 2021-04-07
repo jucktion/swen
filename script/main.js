@@ -59,6 +59,8 @@ Vue.component('partabs', {
         selectTab: function (selectedtab) {
             this.chitabs.forEach(tab => {
                     tab.isActive = (tab.title == selectedtab.title);
+                    if(tab.title == selectedtab.title)
+                        tab.setChildActive();
                 //tab.$children[0].isActive = true;
                 //tab.$children[0].$children[0].$children.isActive = true;
                 //prompt('', tab.$children[0].$children[0].title)
@@ -91,7 +93,14 @@ Vue.component('chitab', {
     },
     updated(){
         //console.log(this.$children[0].name,this.title)
-        this.$children[0].isActive = this.isActive && (this.$children[0].name == this.title)
+        //this.$children[0].isActive = this.isActive && (this.$children[0].name == this.title)
+    },
+    methods:{   
+        setChildActive: function(){
+            console.log(this.$children[0].name)
+            this.$children[0].selectDef()
+            this.$children[0].selected = this.isActive && (this.$children[0].name == this.title)
+        }
     }
 });
 
@@ -145,6 +154,16 @@ Vue.component('tabs', {
                     }
                 }
             });
+        },
+        selectDef:function(){
+            console.log('run selectDef')
+            console.log(this.name,this.$children[0].name)
+            this.selectTab(this.$children[0])
+            // if (this.name == this.$children[0].name){
+            //     console.log(this.$children[0])
+            //     this.selectTab(this.$children[0])
+            // }
+
         }
     }
 });
