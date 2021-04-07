@@ -131,10 +131,6 @@ Vue.component('tabs', {
     created() {
         this.tabs = this.$children;
     },
-    updated(){
-            //console.log(this.$children[0].name)
-            this.$children[0].isActive = true;
-    },
     methods: {
         selectTab: function (selectedtab) {
             this.tabs.forEach(tab => {
