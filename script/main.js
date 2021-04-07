@@ -1,4 +1,4 @@
-//Vue.config.devtools = true;
+Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -58,11 +58,11 @@ Vue.component('partabs', {
     methods: {
         selectTab: function (selectedtab) {
             this.chitabs.forEach(tab => {
-                tab.isActive = (tab.title == selectedtab.title);
+                    tab.isActive = (tab.title == selectedtab.title);
                 //tab.$children[0].isActive = true;
                 //tab.$children[0].$children[0].$children.isActive = true;
                 //prompt('', tab.$children[0].$children[0].title)
-            })
+            });
         }
     }
 
@@ -89,7 +89,10 @@ Vue.component('chitab', {
     mounted() {
         this.isActive = this.selected;
     },
-
+    updated(){
+        //console.log(this.$children[0].name,this.title)
+        this.$children[0].isActive = this.isActive && (this.$children[0].name == this.title)
+    }
 });
 
 Vue.component('tabs', {
@@ -105,26 +108,23 @@ Vue.component('tabs', {
         </div>
     </div>
     `,
+    props: {
+        name: {
+            required: true
+        }
+    },
     data() {
         return {
-            tabs: []
+            tabs: [],
+            isActive: false
         };
     },
     created() {
         this.tabs = this.$children;
     },
-    mounted() {
-        //this.tabs[0].isLoaded = true;
-        //alert(this.tabs.length);
-        // this.tabs.forEach(tab => {
-        //     if (tab.isActive) {
-        //         tab.setData();
-
-        //     }
-        //     //tab.isActive = true;
-        // });
-        //this.tabs[0].isActive = true;
-
+    updated(){
+            //console.log(this.$children[0].name)
+            this.$children[0].isActive = true;
     },
     methods: {
         selectTab: function (selectedtab) {
@@ -184,13 +184,21 @@ Vue.component('tab', {
         //comment this line so all tab and voice load only when they are clicked
         this.isActive = this.selected;
     },
-    updated() {
+    beforeUpdate() {
+        console.log(this.$parent.name, this.$parent.isActive)
+        if(this.$parent.isActive && this.isActive && !this.isLoaded){
+            //console.log(this)
+            this.current = true;
+            this.setData();
+            this.setVoice();
+        }
         if (this.linklist.length != 0)
             this.isLoaded = true;
         if(this.current)
             this.setVoice();
     },
     beforeMount() {
+        if(!this.isLoaded)
         this.setData();
     },
     methods: {
