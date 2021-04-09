@@ -229,6 +229,7 @@ Vue.component('voice', {
     <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop">⏹</span><span @click="speaker" class="play" v-text="playpause">▶</span></div>
 </div>
 <div v-if="settingsShown" id="vsettings">
+<span @click="settingsShown = !settingsShown" class="close">x</span>
     <form>
         <select  v-model="selectedVoice">
         <option v-for="(voice,index) in this.voices" :value="index" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
