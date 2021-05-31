@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+    <title>Frontpage</title>
+</head>
+
+<!-- tab name={references file name where feed is parsed and stored} title={Title shown in the interface}-->
+<body>
+    <div id="app" class="section">
+        <partabs>
+            <chitab title="News" :selected='true'>
+                <tabs>
+                    <tab name="worldnews" title="News" :voice="true" :selected='true'>
+                    </tab>
+                    <tab name="positive" title="GoodNews">
+                    </tab>
+                    <tab name="uk" title="BBC">
+                    </tab>
+                    <tab name="npr" title="NPR">
+                    </tab>
+                    <tab name="nytimes" title="NYT">
+                    </tab>
+                    <tab name="theguardian" title="Guardian">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Tech">
+                <tabs>
+                    <tab name="technology" title="Tech">
+                    </tab>
+                    <tab name="ycombinator" title="Hackernews">
+                    </tab>
+                    <tab name="bbctech" title="BBC">
+                    </tab>
+                    <tab name="techcrunch" title="TC">
+                    </tab>
+                    <tab name="android" title="Android">
+                    </tab>
+                    <tab name="producthunt" title="Product Hunt">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Code">
+                <tabs>
+                    <tab name="programming" title="Programming">
+                    </tab>
+                    <tab name="devto" title="DevTo">
+                    </tab>
+                    <tab name="fcc" title="FreeCodeCamp">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Science">
+                <tabs>
+                    <tab name="science" title="Science">
+                    </tab>
+                    <tab name="newscientist" title="NewScientist">
+                    </tab>
+                    <tab name="nature" title="Nature">
+                    </tab>
+                    <tab name="bbcsci" title="BBC">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Nepal">
+                <tabs>
+                    <tab name="nepal" title="Nepal">
+                    </tab>
+                    <tab name="bbcnp" title="BBC">
+                    </tab>
+                    <tab name="himalayantimes" title="THT">
+                    </tab>
+                    <tab name="kathmandupost" title="Kathmandupost">
+                    </tab>
+                    <tab name="onlinekhabar" title="Onlinekhabar">
+                    </tab>
+                    <tab name="setopati" title="Setopati">
+                    </tab>
+                    <tab name="qfx" title="QFX">
+                    </tab>
+                </tabs>
+            </chitab>
+            <chitab title="Interesting">
+                <tabs>
+                    <tab name="damnThatsInteresting" title="Interesting">
+                    </tab>
+                    <tab name="lifeprotips" title="Lifeprotips">
+                    </tab>
+                    <tab name="todayilearned" title="TIL">
+                    </tab>
+                    <tab name="interestingasfuck" title="Interesting AF">
+                    </tab>
+                    <tab name="nextfuckinglevel" title="Next Level">
+                    </tab>
+                    <tab name="publicfreakout" title="Freakouts">
+                    </tab>
+                </tabs>
+            </chitab>
+        </partabs>
+        <voice></voice>
+    </div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script> -->
+    <script src="script/vue.js"></script>
+    <script src="script/main.js"></script>
+</body>
+</html>
