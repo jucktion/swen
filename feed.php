@@ -1,6 +1,6 @@
 <?php
 ini_set("max_execution_time", "600");
-if (isset($_GET['k']) && $_GET['k'] == 'run123'){
+if (isset($_GET['k']) && $_GET['k'] == '>f#-jr13{=3^>}u'){
 $stime = microtime(true);
 include_once 'functions.php';
 if (isset($_GET['s'])) {
