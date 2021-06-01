@@ -1,5 +1,5 @@
 <?php
-if (isset($_GET['k']) && $_GET['k'] == 'banepa'){
+if (isset($_GET['k']) && $_GET['k'] == 'JuckTion321123'){
 include_once 'functions.php';
 include_once 'simple_html_dom.php';
 
