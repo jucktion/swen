@@ -1,27 +1,6 @@
-.tabs{
-    -webkit-touch-callout:none;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    -webkit-overflow-scrolling:touch;
-    align-items:stretch;
-    display:flex;
-    font-size:1rem;
-    justify-content:space-between;
-    overflow:hidden;
-    overflow-x:auto;
-    white-space:nowrap
-}
-.tabs:not(:last-child){
-    margin-bottom:1.5rem
-}
 body,html,li,ul{
     margin:0;
     padding:0
-}
-ul{
-    list-style:none
 }
 html{
     box-sizing:border-box
@@ -45,6 +24,9 @@ a{
 a:hover{
     color:#fff
 }
+ul{
+    list-style:none
+}
 .content li+li{
     margin-top:.25em
 }
@@ -61,6 +43,24 @@ a:hover{
     z-index:30;
     background-color:#3a3f44;
     border:1px solid #202328
+}
+.tabs{
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    -webkit-overflow-scrolling:touch;
+    align-items:stretch;
+    display:flex;
+    font-size:1rem;
+    justify-content:space-between;
+    overflow:hidden;
+    overflow-x:auto;
+    white-space:nowrap
+}
+.tabs:not(:last-child){
+    margin-bottom:1.5rem
 }
 .tabs a,.tabs ul{
     align-items:center;
@@ -163,6 +163,9 @@ div.content{
     display:grid;
     grid-template-columns:auto minmax(0,1fr)
 }
+.del, .itm{
+    color:#aaa;
+}
 @media (prefers-color-scheme:light){
     /*! Light CSS Used from: https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css */
     .navbar,body,html{
@@ -234,7 +237,7 @@ div.content{
     .navbar{
         border:unset
     }
-    span.del, span.itm{
+    .del, .itm{
         color:#fff;
     }
 }
