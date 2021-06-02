@@ -1,4 +1,4 @@
-//Vue.config.devtools = true;
+Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -146,7 +146,7 @@ Vue.component('tab', {
     template: `
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">✖</span></li>
+        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -224,9 +224,9 @@ Vue.component('voice', {
     template:`
 <div v-show="showFab" class="voice-section">
 <div class="fab">
-    <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
+    <div class="settings" @click="settingsShown = !settingsShown"><img src="/img/settings.svg" alt="Voice settings"></div>
 
-    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop">⏹</span><span @click="speaker" class="play" v-text="playpause">▶</span></div>
+    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop"><img src="/img/stop.svg" alt="Stop Player"></span><span @click="speaker" class="play"><img :src="svg"></span></div>
 </div>
 <div v-if="settingsShown" id="vsettings">
 <span @click="settingsShown = !settingsShown" class="close">x</span>
@@ -258,7 +258,8 @@ Vue.component('voice', {
             settingsShown: false,
             stopShown: false,
             showFab: true,
-            playpause: '▶',
+            state: 0,
+            svg: '/img/play.svg',
             speak: [],
             pitch: 1,
             rate: 1,
@@ -315,17 +316,15 @@ Vue.component('voice', {
             this.speak = this.$root.voice.map(x => x.title);
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
-                this.playpause = '▶';
+                this.state = 0;
                 //console.log('speechSynthesis.paused');
-                return;
             }
             if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
-                this.playpause = '▶';
-                //console.log('speechSynthesis.resumed');
-                return;
+                this.state = 1;
+                //console.log('speechSynthesis.resumed');    
             }
-            if(this.speak.length > 0){
+            if(this.speak.length > 0 && !this.synth.speaking){
                 let utterThis = new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));
                 this.stopShown = true;
                     now = this;
@@ -339,17 +338,23 @@ Vue.component('voice', {
                     utterThis.voice = this.voices[this.selectedVoice];
                     utterThis.pitch = this.pitch;
                     utterThis.rate = this.rate;
-                    this.playpause = '⏸';
+                    this.state = 1;
                     this.synth.speak(utterThis);
+                    
             }
-
+            this.playPause();
         },
         stopSpeak:function(){
                 this.synth.cancel();
-                this.playpause = '▶';
+                this.state = 0;
                 this.stopShown = false;
+                this.playPause();
                 //console.error('speechSynthesis.speaking');
         },
+        playPause: function(){
+            this.svg = this.state == 0 ? '/img/play.svg' : '/img/pause.svg';
+        }
+        ,
         onScroll: function(){
             this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
         }
