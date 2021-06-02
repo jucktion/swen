@@ -258,7 +258,6 @@ Vue.component('voice', {
             settingsShown: false,
             stopShown: false,
             showFab: true,
-            state: 0,
             svg: '/img/play.svg',
             speak: [],
             pitch: 1,
@@ -316,19 +315,17 @@ Vue.component('voice', {
             this.speak = this.$root.voice.map(x => x.title);
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
-                this.state = 0;
-                this.playPause();
+                this.playPause(0);
                 return;
                 //console.log('speechSynthesis.paused');
             }
             if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
-                this.state = 1;
-                this.playPause();
+                this.playPause(1);
                 return;
                 //console.log('speechSynthesis.resumed');    
             }
-            if(this.speak.length > 0 && !this.synth.speaking){
+            if(this.speak.length > 0){
                 let utterThis = new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));
                 this.stopShown = true;
                     now = this;
@@ -342,21 +339,19 @@ Vue.component('voice', {
                     utterThis.voice = this.voices[this.selectedVoice];
                     utterThis.pitch = this.pitch;
                     utterThis.rate = this.rate;
-                    this.state = 1;
                     this.synth.speak(utterThis);
-                    this.playPause();
+                    this.playPause(1);
             }
             
         },
         stopSpeak:function(){
                 this.synth.cancel();
-                this.state = 0;
                 this.stopShown = false;
-                this.playPause();
+                this.playPause(0);
                 //console.error('speechSynthesis.speaking');
         },
-        playPause: function(){
-            this.svg = this.state == 0 ? '/img/play.svg' : '/img/pause.svg';
+        playPause: function(state){
+            this.svg = state == 0 ? '/img/play.svg' : '/img/pause.svg';
         }
         ,
         onScroll: function(){
