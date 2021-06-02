@@ -1,33 +1,40 @@
 # SWEN - Categorized news with RSS/Reddit
 
+Collect news in a single place for Reddit subs and RSS feeds. The Text-to-Speech (TTS) helps you listen to your news. The TTS management settings help you configure the TTS sounds available on your device. Additionally, you can set pitch, speed and interval configuration.
+
+![Screenshot]('screenshot.png?raw=true')
+
 ## Getting Started
 
+The script fetches the destinations using php-curl, processes the content, and saves them in `json` files in the `temp` directory. On the frontend, VueJS preares the virtual DOM and uses the json files to list the items listed in the json file. The TTS uses the voices available on your device. If your device has a natural voice engine, it is a much more pleasant experience.
+
 ### Backend
-The script fetches the destinations using curl, processes the content, and saves them in `json` files in the `temp` directory.
 
-The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `temp` folder. 
+The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `temp` folder. The core functions are present in `functions.php`. For setting up, you do not need to edit the `functions.php` file.
 
-#### Subreddits
-The `$subs` variable is an array that contains the name of the subreddits to be pinged. 
+#### Subreddits:
+The `$subs` variable is an array that contains the name of the subreddits to be requested. 
 
 For subreddits, the name of the subreddit is used in the parsed json file.
 
 E.g. for `worldnews` subreddit, the file would be saved as `worldnews-parsed.json`.
 
-#### RSS Feeds
-For parsed feeds, there is some rudimentary processing to use the domain name for the parsed file name. However, if yo want a specific name, `parsefeed(feed_link, name)` function is used. Which takes two arguments, the feed link and the name prepended to the parsed json file.
+#### RSS Feeds:
+For parsed feeds, there is some rudimentary naming process to use the domain name for the parsed file name. It might not work with sub-domains and complicated URLs. It is easier if you a specific name is provided using the `parsefeed(feed_link, name)` function. Which takes two arguments, the RSS feed link and the name prepended to the parsed json file.
 
-E.g. for
+E.g.
 
 ```
 parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
 ```
 
-the parsed file will be saved as `bbctech-parsed.json`
+For the above code, it will fetch the RSS URL and the parsed file will be saved as `bbctech-parsed.json` in the temp folder
 
-#### Security
+Note: The sparser.php is a simple html parser to parse HTML into json made for sites that do not provide RSS feeds.
 
-An simple url query string parameter `k` is used to prevent unauthorized requests for processing.
+### Security
+
+An simple URL query string parameter `k` is used to prevent unauthorized requests for processing the feeds
 
 If you use `run123` value for `k`, a valid link to process the feeds will be:
 
@@ -37,7 +44,7 @@ https://domain.com/feed.php?k=run123
 
 ### Frontend
 
-On the `index.html`, second level tabs are represented in `<tab name="npr" title="NPR"></tab>` format. The `name` attribute of the tab represents the `json` file to call.
+On the `index.html`, first level of tabs are represented in `<chitab title=News :selected=true>`. The title is what get displayed in the frontend. Second level tabs are represented in `<tab name="npr" title="NPR"></tab>` format. The `name` attribute of the tab represents the `json` file to call.
 
 For tab with the name `npr`, it will call the `npr-parsed.json` file and process it when that tab is clicked.
 
@@ -50,9 +57,29 @@ You can run cron jobs on your own linux system with `crontab -e` or use external
 php <script-location>/feed.php?k=run123 > dev/null 2>&1
 ```
 
+### Issues
+
+Common Issues (PC/Mobile)
+
+- Cannot select default TTS voice on load
+
+Common Mobile Issues
+
+- When a tab has a lot of text, the TTS fails to speak. (solution: reduce the number of items to be read from the gear icon)
+- Text to Speech FAB doesn't disappear on scroll to bottom
+
+Firefox Mobile
+- Cannot pause (related to speechsynthesis API?)
+
+
 ### Credits
-Laracasts [youtube video](https://youtu.be/-95jgDDZq3Y) on VueJS and Tabs
+
+[PHP Developers](https://www.php.net/)
 
 [VueJS Project](https://vuejs.org/)
 
-[PHP Developers](https://www.php.net/)
+[Mozilla SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/Window/speechSynthesis)
+
+[Bulma CSS](https://bulma.io/)
+
+[Laracasts youtube video](https://youtu.be/-95jgDDZq3Y) on VueJS and Tabs

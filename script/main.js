@@ -1,4 +1,4 @@
-function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
+Vue.config.devtools=true;function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
 Vue.component('partabs',{template:`
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
@@ -31,7 +31,7 @@ tab.setChildActive();});}}});Vue.component('chitab',{template:`
 if(tab.name==selectedtab.name){tab.current=true;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">✖</span></li>
+        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -42,9 +42,9 @@ this.setVoice();},beforeMount(){if(!this.isLoaded)
 this.setData();},methods:{setData:function(){if(this.isActive){let now=this;let filename='temp/'+this.name.toLowerCase()+'-parsed.json';getContent(filename,'GET',function(){now.linklist=JSON.parse(this.responseText);});}},setVoice:function(){if(this.current&&this.isActive){this.$root.voice=this.linklist;}},remove:function(index){this.$delete(this.linklist,index)},htmlDecode:function(str){const doc=new DOMParser().parseFromString(str,"text/html");return doc.documentElement.textContent;}}});Vue.component('voice',{template:`
 <div v-show="showFab" class="voice-section">
 <div class="fab">
-    <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
+    <div class="settings" @click="settingsShown = !settingsShown"><img src="/img/settings.svg" alt="Voice settings"></div>
 
-    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop">⏹</span><span @click="speaker" class="play" v-text="playpause">▶</span></div>
+    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop"><img src="/img/stop.svg" alt="Stop Player"></span><span @click="speaker" class="play"><img :src="svg"></span></div>
 </div>
 <div v-if="settingsShown" id="vsettings">
 <span @click="settingsShown = !settingsShown" class="close">x</span>
@@ -70,9 +70,10 @@ this.setData();},methods:{setData:function(){if(this.isActive){let now=this;let 
     </form>
 </div>
 </div>
-    `,data(){return{settingsShown:false,stopShown:false,showFab:true,playpause:'▶',speak:[],pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){if('speechSynthesis'in window){this.loadVoices();this.synth.cancel();window.addEventListener('scroll',this.onScroll);}else{this.showFab=false;}},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let synth=window.speechSynthesis;let id;id=setInterval(()=>{if(synth.getVoices().length!==0){resolve(synth.getVoices());clearInterval(id);}},10);})}
-let s=setSpeech();s.then((voices)=>{this.voices=this.synth.getVoices();});},speaker:function(){this.speak=this.$root.voice.map(x=>x.title);if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.playpause='▶';return;}
-if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.playpause='▶';return;}
-if(this.speak.length>0){let utterThis=new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
+    `,data(){return{settingsShown:false,stopShown:false,showFab:true,state:0,svg:'/img/play.svg',speak:[],pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){if('speechSynthesis'in window){this.loadVoices();this.synth.cancel();window.addEventListener('scroll',this.onScroll);}else{this.showFab=false;}},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let synth=window.speechSynthesis;let id;id=setInterval(()=>{if(synth.getVoices().length!==0){resolve(synth.getVoices());clearInterval(id);}},10);})}
+let s=setSpeech();s.then((voices)=>{this.voices=this.synth.getVoices();});},speaker:function(){this.speak=this.$root.voice.map(x=>x.title);if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.state=0;}
+if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.state=1;}
+if(this.speak.length>0&&!this.synth.speaking){let utterThis=new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
 utterThis.onerror=function(event){console.error('SpeechSynthesisUtterance.onerror');}
-utterThis.voice=this.voices[this.selectedVoice];utterThis.pitch=this.pitch;utterThis.rate=this.rate;this.playpause='⏸';this.synth.speak(utterThis);}},stopSpeak:function(){this.synth.cancel();this.playpause='▶';this.stopShown=false;},onScroll:function(){this.showFab=(window.innerHeight+window.scrollY)!=document.body.offsetHeight;}}});let vm=new Vue({el:'#app',data(){return{voice:[]}}});
+utterThis.voice=this.voices[this.selectedVoice];utterThis.pitch=this.pitch;utterThis.rate=this.rate;this.state=1;this.synth.speak(utterThis);}
+this.playPause();},stopSpeak:function(){this.synth.cancel();this.state=0;this.stopShown=false;this.playPause();},playPause:function(){this.svg=this.state==0?'/img/play.svg':'/img/pause.svg';},onScroll:function(){this.showFab=(window.innerHeight+window.scrollY)!=document.body.offsetHeight;}}});let vm=new Vue({el:'#app',data(){return{voice:[]}}});
