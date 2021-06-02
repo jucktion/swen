@@ -10,7 +10,9 @@ The script fetches the destinations using php-curl, processes the content, and s
 
 ### Backend
 
-The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `temp` folder. The core functions are present in `functions.php`. For setting up, you do not need to edit the `functions.php` file.
+The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `temp` folder. 
+
+The core functions are present in `functions.php`. For setting up, you do not need to edit the `functions.php` file. By default, the `top` list of the subreddit is requested. 
 
 #### Subreddits:
 The `$subs` variable is an array that contains the name of the subreddits to be requested. 
@@ -59,17 +61,27 @@ php <script-location>/feed.php?k=run123 > dev/null 2>&1
 
 ### Issues
 
+#### Backend
+
+- Setting a global timer on from line 31 to line 41 and 193
+
+#### Frontend
+
 Common Issues (PC/Mobile)
 
-- Cannot select default TTS voice on load
+- Cannot select default TTS voice on first load on some devices
 
 Common Mobile Issues
 
-- When a tab has a lot of text, the TTS fails to speak. (solution: reduce the number of items to be read from the gear icon)
+- When a tab has a lot of text, the TTS fails to initiate and speak. (solution: reduce the number of items to be read from the gear icon, like 1 to 15)
+
 - Text to Speech FAB doesn't disappear on scroll to bottom
 
-Firefox Mobile
-- Cannot pause (related to speechsynthesis API?)
+- Older devices, if capable of web speech synthesis, take time to pause and stop
+
+Firefox Mobile (Android)
+
+- Cannot pause (related to speechsynthesis API not being completely supported)
 
 
 ### Credits

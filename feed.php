@@ -1,6 +1,6 @@
 <?php
+if (isset($_GET['k']) && $_GET['k'] == 'run123'){
 ini_set("max_execution_time", "600");
-if (isset($_GET['k']) && $_GET['k'] == 'JuckTion321123'){
 $stime = microtime(true);
 include_once 'functions.php';
 if (isset($_GET['s'])) {
@@ -15,11 +15,17 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
         echo 'Not a valid URL';
     }
 } else {
-    #parse Reddit subs
+    #
+    # Parse Reddit subs
+    # Array with the list of subs to fetch
+    #
     $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel'];
     parseReddit($subs);
 
-    #parse RSS Feeds
+    #
+    # Parse RSS Feeds
+    # One per line 
+    #
     parseFeed('https://hnrss.org/frontpage', 'ycombinator');
     parseFeed('http://feeds.feedburner.com/TechCrunch?format=xml', 'techcrunch');
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');

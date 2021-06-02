@@ -67,10 +67,6 @@ function parseStore($subs)
         echo 'Caught exception: ', $e->getMessage(), "<br>";
     }
 
-// $filename = $subs .'.json';
-    // file_put_contents($filename, $lv);
-
-#$jsf = file_get_contents('pics.json');
     if (isset($lv)) {
         $data = json_decode($lv, true);
         $datad = $data['data']['children'];
@@ -148,6 +144,7 @@ function parseXML($feed, $domain, $test = false)
 }
 
 //Write json file to temp folder
+# Isn't used at the moment
 function write_json($domain, $array){
     $jd = json_encode($array);
     $filename = 'temp/' . $domain . '-parsed.json';
@@ -173,7 +170,7 @@ function write_json($domain, $array){
     }
 }
 
-//
+# To test the parsing without 
 function cparseFeed($feed)
 {
     $xml = simplexml_load_string(getUrl($feed), 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -183,6 +180,7 @@ function cparseFeed($feed)
     var_dump($array);
 }
 
+#
 #Test uses var_dump to output the result
 function parseFeed($feed, $domain = false, $test = false)
 {
@@ -212,48 +210,6 @@ function parseFeed($feed, $domain = false, $test = false)
         } catch (Exception $e) {
             echo $domain, " error: ", $e->getMessage, '<br>';
         }
-    }
-}
-
-function QFX()
-{
-    $feed = 'https://api.qfxcinemas.com/api/public/NowShowing';
-    $data1 = json_decode(getUrl($feed), true);
-    $feed2 = 'https://api.qfxcinemas.com/api/public/ComingSoon';
-    $data2 = json_decode(getUrl($feed2), true);
-    $data = array_merge($data1['data'], $data2['data']);
-    //$data = $data1['data'] + $data2['data'];
-    //var_dump( $data);
-    //echo $data;
-    foreach ($data as $k => $v) {
-        //echo $article->plaintext;
-        //$date->sub(new DateInterval('PT4H3M2S'));
-        $arr[$k]['title'] = (array_key_exists('eventTypeID', $v)) ? 'Coming Soon: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES) : 'Showing: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES);
-        $arr[$k]['description'] = htmlspecialchars_decode($v['annotation'], ENT_QUOTES);
-        $arr[$k]['url'] = (isset($v['eventID'])) ? 'https://www.qfxcinemas.com/show?eventId=' . $v['eventID'] : '#';
-        $arr[$k]['image'] = 'https://api.qfxcinemas.com/' . $v['bannerUrl'];
-    }
-    $jd = json_encode($arr);
-
-    $filename = 'temp/qfx-parsed.json';
-    try {
-        file_put_contents($filename, $jd);
-        echo 'QFX: complete! <br>';
-    } catch (Exception $e) {
-        echo 'QFX Caught exception: ', $e->getMessage(), "<br>";
-    }
-
-}
-
-function parseQFX()
-{
-    $filename = 'temp/qfx-parsed.json';
-    if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 48 * 3600) {
-            QFX();
-        }
-    } else {
-        QFX();
     }
 }
 unset($arr);
