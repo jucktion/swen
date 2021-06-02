@@ -317,11 +317,15 @@ Vue.component('voice', {
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
                 this.state = 0;
+                this.playPause();
+                return;
                 //console.log('speechSynthesis.paused');
             }
             if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
                 this.state = 1;
+                this.playPause();
+                return;
                 //console.log('speechSynthesis.resumed');    
             }
             if(this.speak.length > 0 && !this.synth.speaking){
@@ -340,9 +344,9 @@ Vue.component('voice', {
                     utterThis.rate = this.rate;
                     this.state = 1;
                     this.synth.speak(utterThis);
-                    
+                    this.playPause();
             }
-            this.playPause();
+            
         },
         stopSpeak:function(){
                 this.synth.cancel();
