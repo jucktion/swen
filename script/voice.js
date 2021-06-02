@@ -1,3 +1,4 @@
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/speechSynthesis
 var synth = window.speechSynthesis;
 
 var inputForm = document.querySelector('form');

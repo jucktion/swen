@@ -163,9 +163,6 @@ div.content{
     display:grid;
     grid-template-columns:auto minmax(0,1fr)
 }
-.del, .itm{
-    color:#aaa;
-}
 @media (prefers-color-scheme:light){
     /*! Light CSS Used from: https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css */
     .navbar,body,html{
@@ -237,8 +234,9 @@ div.content{
     .navbar{
         border:unset
     }
-    .del, .itm{
-        color:#fff;
+    .del, .itm {
+        color: #555;
+        text-shadow: 1px 1px 0 #fff;
     }
 }
 @media screen and (min-width:1024px){
