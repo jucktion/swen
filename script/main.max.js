@@ -36,6 +36,7 @@ Vue.component('partabs', {
         <div class='tab-details'>
             <slot></slot>
         </div>
+
     </div>
     `,
     data() {
@@ -145,7 +146,7 @@ Vue.component('tab', {
     template: `
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">✖</span></li>
+        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -223,8 +224,9 @@ Vue.component('voice', {
     template:`
 <div v-show="showFab" class="voice-section">
 <div class="fab">
-    <div class="settings" @click="settingsShown = !settingsShown">⚙️</div>
-    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop">⏹</span><span @click="speaker" class="play" v-text="playpause">▶</span></div>
+    <div class="settings" @click="settingsShown = !settingsShown"><img src="/img/settings.svg" alt="Voice settings"></div>
+
+    <div class="player"><span @click="stopSpeak" v-show="stopShown" class="stop"><img src="/img/stop.svg" alt="Stop Player"></span><span @click="speaker" class="play"><img :src="svg"></span></div>
 </div>
 <div v-if="settingsShown" id="vsettings">
 <span @click="settingsShown = !settingsShown" class="close">x</span>
@@ -255,9 +257,10 @@ Vue.component('voice', {
         return{
             settingsShown: false,
             stopShown: false,
-            showFab: true,
-            playpause: '▶',
+            showFab: false,
+            svg: '/img/play.svg',
             speak: [],
+            saythis: null,
             pitch: 1,
             rate: 1,
             separator: '.... and in other news ....',
@@ -270,14 +273,16 @@ Vue.component('voice', {
         }
     },
     mounted(){
-        //check if browser support speech synthesis
-        if ('speechSynthesis' in window){
+        //check if browser support speech synthesis, if it does, display the TTS FAB. 
+        this.showFab = ('speechSynthesis' in window);
+        if (this.showFab){
             this.loadVoices();
             this.synth.cancel();
-            window.addEventListener('scroll', this.onScroll);
-        }else{
-            this.showFab = false;
         }
+        //since hiding FAB onScroll function isn't working, disable it on mobile devices
+        let mq = window.matchMedia("(max-width: 512px)");
+        if (!mq)
+        window.addEventListener('scroll', this.onScroll);
     },
     beforeDestroy () {
         window.removeEventListener('scroll', this.onScroll)
@@ -310,21 +315,25 @@ Vue.component('voice', {
         },
         speaker:function(){
             //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
-            this.speak = this.$root.voice.map(x => x.title);
+            if (this.saythis == null && !this.synth.speaking){
+                this.speak = this.$root.voice.map(x => x.title);
+                this.saythis = this.speak.slice(this.startItem-1,this.endItem).join(this.separator);
+            }
+            
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
-                this.playpause = '▶';
+                this.playPause(0);
+                return;
                 //console.log('speechSynthesis.paused');
-                return;
             }
-            if (this.synth.paused && this.synth.speaking) {
+            else if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
-                this.playpause = '▶';
-                //console.log('speechSynthesis.resumed');
+                this.playPause(1);
                 return;
+                //console.log('speechSynthesis.resumed');    
             }
-            if(this.speak.length > 0){
-                let utterThis = new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));
+            else if (!this.synth.paused && this.saythis != null){
+                let utterThis = new SpeechSynthesisUtterance(this.saythis);
                 this.stopShown = true;
                     now = this;
                     utterThis.onend = function (event) {
@@ -337,16 +346,19 @@ Vue.component('voice', {
                     utterThis.voice = this.voices[this.selectedVoice];
                     utterThis.pitch = this.pitch;
                     utterThis.rate = this.rate;
-                    this.playpause = '⏸';
                     this.synth.speak(utterThis);
-            }
-
+                    this.playPause(1);
+            }            
         },
         stopSpeak:function(){
                 this.synth.cancel();
-                this.playpause = '▶';
                 this.stopShown = false;
+                this.saythis = null;
+                this.playPause(0);
                 //console.error('speechSynthesis.speaking');
+        },
+        playPause: function(talking){
+            this.svg = talking == 0 ? '/img/play.svg' : '/img/pause.svg';
         },
         onScroll: function(){
             this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
