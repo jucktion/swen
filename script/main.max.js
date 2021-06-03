@@ -1,4 +1,4 @@
-Vue.config.devtools = true;
+//Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -320,19 +320,20 @@ Vue.component('voice', {
                 this.speak = this.$root.voice.map(x => x.title);
                 this.saythis = this.speak.slice(this.startItem-1,this.endItem).join(this.separator);
             }
+            
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
                 this.playPause(0);
                 return;
                 //console.log('speechSynthesis.paused');
             }
-            if (this.synth.paused && this.synth.speaking) {
+            else if (this.synth.paused && this.synth.speaking) {
                 this.synth.resume();
                 this.playPause(1);
                 return;
                 //console.log('speechSynthesis.resumed');    
             }
-            if(!this.synth.paused && this.saythis != null){
+            else if(!this.synth.paused && this.saythis != null){
                 let utterThis = new SpeechSynthesisUtterance(this.saythis);
                 this.stopShown = true;
                     now = this;
@@ -349,6 +350,7 @@ Vue.component('voice', {
                     this.synth.speak(utterThis);
                     this.playPause(1);
             }
+            else{}  
             
         },
         stopSpeak:function(){
@@ -358,8 +360,8 @@ Vue.component('voice', {
                 this.playPause(0);
                 //console.error('speechSynthesis.speaking');
         },
-        playPause: function(state){
-            this.svg = state == 0 ? '/img/play.svg' : '/img/pause.svg';
+        playPause: function(talking){
+            this.svg = talking == 0 ? '/img/play.svg' : '/img/pause.svg';
         },
         onScroll: function(){
             this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
