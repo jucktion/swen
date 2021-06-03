@@ -1,4 +1,4 @@
-Vue.config.devtools=true;function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
+function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
 Vue.component('partabs',{template:`
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
@@ -70,9 +70,12 @@ this.setData();},methods:{setData:function(){if(this.isActive){let now=this;let 
     </form>
 </div>
 </div>
-    `,data(){return{settingsShown:false,stopShown:false,showFab:true,svg:'/img/play.svg',speak:[],pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){if('speechSynthesis'in window){this.loadVoices();this.synth.cancel();window.addEventListener('scroll',this.onScroll);}else{this.showFab=false;}},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let synth=window.speechSynthesis;let id;id=setInterval(()=>{if(synth.getVoices().length!==0){resolve(synth.getVoices());clearInterval(id);}},10);})}
-let s=setSpeech();s.then((voices)=>{this.voices=this.synth.getVoices();});},speaker:function(){this.speak=this.$root.voice.map(x=>x.title);if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.playPause(0);return;}
-if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.playPause(1);return;}
-if(this.speak.length>0){let utterThis=new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
+    `,data(){return{settingsShown:false,stopShown:false,showFab:false,svg:'/img/play.svg',speak:[],saythis:null,pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){this.showFab=('speechSynthesis'in window);if(this.showFab){this.loadVoices();this.synth.cancel();}
+let mq=window.matchMedia("(max-width: 512px)").matches;if(!mq)
+window.addEventListener('scroll',this.onScroll);},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let synth=window.speechSynthesis;let id;id=setInterval(()=>{if(synth.getVoices().length!==0){resolve(synth.getVoices());clearInterval(id);}},10);})}
+let s=setSpeech();s.then((voices)=>{this.voices=this.synth.getVoices();});},speaker:function(){if(this.saythis==null&&!this.synth.speaking){this.speak=this.$root.voice.map(x=>x.title);this.saythis=this.speak.slice(this.startItem-1,this.endItem).join(this.separator);}
+if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.playPause(0);return;}
+else if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.playPause(1);return;}
+else if(!this.synth.paused&&this.saythis!=null){let utterThis=new SpeechSynthesisUtterance(this.saythis);this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
 utterThis.onerror=function(event){console.error('SpeechSynthesisUtterance.onerror');}
-utterThis.voice=this.voices[this.selectedVoice];utterThis.pitch=this.pitch;utterThis.rate=this.rate;this.synth.speak(utterThis);this.playPause(1);}},stopSpeak:function(){this.synth.cancel();this.stopShown=false;this.playPause(0);},playPause:function(state){this.svg=state==0?'/img/play.svg':'/img/pause.svg';},onScroll:function(){this.showFab=(window.innerHeight+window.scrollY)!=document.body.offsetHeight;}}});let vm=new Vue({el:'#app',data(){return{voice:[]}}});
+utterThis.voice=this.voices[this.selectedVoice];utterThis.pitch=this.pitch;utterThis.rate=this.rate;this.synth.speak(utterThis);this.playPause(1);}},stopSpeak:function(){this.synth.cancel();this.stopShown=false;this.saythis=null;this.playPause(0);},playPause:function(talking){this.svg=talking==0?'/img/play.svg':'/img/pause.svg';},onScroll:function(){this.showFab=(window.innerHeight+window.scrollY)!=document.body.offsetHeight;}}});let vm=new Vue({el:'#app',data(){return{voice:[]}}});
