@@ -269,7 +269,6 @@ Vue.component('voice', {
             selectedVoice : 0,
             startItem: 1,
             endItem: 25
-
         }
     },
     mounted(){
@@ -280,7 +279,7 @@ Vue.component('voice', {
             this.synth.cancel();
         }
         //since hiding FAB onScroll function isn't working, disable it on mobile devices
-        let mq = window.matchMedia("(max-width: 512px)");
+        let mq = window.matchMedia("(max-width: 512px)").matches;
         if (!mq)
         window.addEventListener('scroll', this.onScroll);
     },
