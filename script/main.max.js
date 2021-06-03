@@ -260,6 +260,7 @@ Vue.component('voice', {
             showFab: true,
             svg: '/img/play.svg',
             speak: [],
+            saythis: null,
             pitch: 1,
             rate: 1,
             separator: '.... and in other news ....',
@@ -276,10 +277,13 @@ Vue.component('voice', {
         if ('speechSynthesis' in window){
             this.loadVoices();
             this.synth.cancel();
-            window.addEventListener('scroll', this.onScroll);
         }else{
             this.showFab = false;
         }
+        //since the hide FAB onScroll function isn't working, disable it on mobile devices
+        let mq = window.matchMedia("(max-width: 512px)");
+        if (!mq)
+        window.addEventListener('scroll', this.onScroll);
     },
     beforeDestroy () {
         window.removeEventListener('scroll', this.onScroll)
@@ -312,7 +316,10 @@ Vue.component('voice', {
         },
         speaker:function(){
             //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
-            this.speak = this.$root.voice.map(x => x.title);
+            if (this.saythis == null && !this.synth.speaking){
+                this.speak = this.$root.voice.map(x => x.title);
+                this.saythis = this.speak.slice(this.startItem-1,this.endItem).join(this.separator);
+            }
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
                 this.playPause(0);
@@ -325,8 +332,8 @@ Vue.component('voice', {
                 return;
                 //console.log('speechSynthesis.resumed');    
             }
-            if(this.speak.length > 0){
-                let utterThis = new SpeechSynthesisUtterance(this.speak.slice(this.startItem-1,this.endItem).join(this.separator));
+            if(!this.synth.paused && this.saythis != null){
+                let utterThis = new SpeechSynthesisUtterance(this.saythis);
                 this.stopShown = true;
                     now = this;
                     utterThis.onend = function (event) {
@@ -347,13 +354,13 @@ Vue.component('voice', {
         stopSpeak:function(){
                 this.synth.cancel();
                 this.stopShown = false;
+                this.saythis = null;
                 this.playPause(0);
                 //console.error('speechSynthesis.speaking');
         },
         playPause: function(state){
             this.svg = state == 0 ? '/img/play.svg' : '/img/pause.svg';
-        }
-        ,
+        },
         onScroll: function(){
             this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
         }
