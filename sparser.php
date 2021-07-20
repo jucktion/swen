@@ -129,7 +129,7 @@ function parseQFX()
 kathmandupost();
 himalayantimes();
 bbcnp();
-parseQFX();
+//parseQFX();
 }
 // $htmlNodes = $doc->getElementsByTagName('article');
 // foreach ($htmlNodes as $item){
