@@ -126,22 +126,32 @@ function parseQFX()
     }
 }
 
+function sharesansarIPO(){
+        $data = getUrl('https://www.sharesansar.com/category/ipo-fpo-news');
+        $arr = array();
+    
+        //echo $parsed;
+        $html = new simple_html_dom();
+    
+        $html->load($data);
+        #var_dump($html);
+        #foreach ($html->find('h3[class*="-Headline"]') as $k => $article) {
+        foreach ($html->find('.newslist div.col-xs-12 a') as $k => $article) {
+            // $title = $article->find('a',0)->plaintext;
+            // $link = $article->find('a',0)->href;
+            // echo $title,'<br>', $link,'<br><br>';
+    
+            $arr[$k]['title'] = $article->find('h4',0)->plaintext;
+            $arr[$k]['url'] = $article->href;
+            // echo $article->plaintext, '<br>';
+        }
+        $domain = 'npipo';
+        write_json($domain, $arr);
+    }
+
 kathmandupost();
 himalayantimes();
 bbcnp();
+sharesansarIPO();
 //parseQFX();
 }
-// $htmlNodes = $doc->getElementsByTagName('article');
-// foreach ($htmlNodes as $item){
-//     echo $item;
-// }
-
-#cparsefeed('https://news.ycombinator.com/rss');
-#parseStore('technology');
-
-#Test Feed links
-
-#parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature', $test = true);
-
-// $xml = simplexml_load_string(getUrl('https://techcrunch.com/feed/'), 'SimpleXMLElement', LIBXML_NOCDATA);
-// var_dump($xml);
