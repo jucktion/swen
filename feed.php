@@ -30,18 +30,18 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('http://feeds.feedburner.com/TechCrunch?format=xml', 'techcrunch');
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
-    parseFeed('https://rssmix.com/u/12292990/rss.xml', 'nature');
+    parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
     parseFeed('http://feeds.feedburner.com/scienctistnew?format=xml','newscientist');
     parsefeed('https://feeds.bbci.co.uk/news/world/rss.xml');
     parsefeed('https://www.npr.org/rss/rss.php?id=1001');
     parsefeed('https://www.theguardian.com/world/rss');
     parsefeed('https://www.onlinekhabar.com/feed');
     parsefeed('https://www.setopati.com/feed');
-    parsefeed('http://rssmix.com/u/9959139/rss.xml','producthunt');
+    parsefeed('https://www.producthunt.com/feed','producthunt');
     parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
     parsefeed('https://dev.to/feed/','devto');
     parsefeed('https://www.freecodecamp.org/news/rss/','fcc');
-    parsefeed('http://rssmix.com/u/12876876/rss.xml','positive');
+    parsefeed('https://www.goodnewsnetwork.org/feed/','positive');
 }
 $etime = microtime(true);
 $exc_time = ($etime - $stime);

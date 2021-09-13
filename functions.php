@@ -93,7 +93,7 @@ function parseStore($subs)
 }
 
 #Parse XML File for feeds
-function parseXML($feed, $domain, $test = false)
+function parseXML($feed, $domain, $test = false, $json = false)
 {
     libxml_use_internal_errors(true);
     try {
@@ -101,13 +101,102 @@ function parseXML($feed, $domain, $test = false)
     } catch (Exception $e) {
         echo $e->getMessage();
     }
-
+    // Debug here when test is set to true
     if (!empty($xml) && $test) {
-        var_dump($xml);
-    } elseif (!empty($xml)) {
+        //First to uncomment for debug
+            // echo "<pre>";
+            // print_r($xml);
+            // echo "</pre>";
+        //First to uncomment for debug
+
+        // foreach ($xml->entry as $v) {
+        // echo $v->title. ' ' . $v->link['href'] . '</br>';
+        // }
+        //echo sizeof($xml->item);
+        // $json = json_encode($xml->xpath('/item'));
+        // $array = json_decode($json, true);
+        // echo "<pre>";
+        // print_r($array);
+        // echo "</pre>";
+        // $json = json_encode($xml->xpath('//channel/item'));
+        // $array = json_decode($json, true);
+        // foreach (array($xml->channel->item as $k => $v) {
+        //     echo $k. ' '. $v->title[0];
+
+        // }
+        // $k =0;
+        // foreach ($xml->channel->item as $v) {
+        //     $arr[$k]['title'] = (string)$v->title;
+        //     $arr[$k]['url'] = (string)$v->link;
+
+        //     //check comments link for ycombinator only
+        //     if ($domain == 'ycombinator') {
+        //         if (isset($v['comments'])) {
+        //             $arr[$k]['rurl'] = (string)$v->comments;
+        //             $arr[$k]['score'] = 'y';
+        //         }
+
+        //     }
+        //         $k++;
+        // }
+        // // var_dump($arr);
+        // $jd = json_encode($arr);
+        // $filename = 'temp/' . $domain . '-parsed.json';
+        // try {
+        //     file_put_contents($filename, $jd);
+        //     echo $domain . ': complete! <br>';
+        // } catch (exception $e) {
+        //     echo $domain, ' caught exception: ', $e->getmessage(), "<br>";
+        // }
+
+    }
+    elseif(!empty($xml)){
+        $k =0;
+        if($domain == "nature"){
+            foreach ($xml->item as $v) {
+                $arr[$k]['title'] = (string)$v->title;
+                $arr[$k]['url'] = (string)$v->link;
+                $k++;
+            }
+
+        }
+        elseif($domain == "producthunt"){
+            foreach ($xml->entry as $v) {
+                $arr[$k]['title'] = (string)$v->title;
+                $arr[$k]['url'] = (string)$v->link['href'];
+                $k++;
+            }
+        }
+        else{
+            foreach ($xml->channel->item as $v) {
+                $arr[$k]['title'] = (string)$v->title;
+                $arr[$k]['url'] = (string)$v->link;
+
+                //check comments link for ycombinator only
+                if ($domain == 'ycombinator') {
+                    if ($v->comments) {
+                        $arr[$k]['rurl'] = (string)$v->comments;
+                        $arr[$k]['score'] = 'Y';
+                    }
+
+                }
+                    $k++;
+            }
+        }
+        // var_dump($arr);
+        $jd = json_encode($arr);
+        $filename = 'temp/' . $domain . '-parsed.json';
+        try {
+            file_put_contents($filename, $jd);
+            echo $domain . ': complete! <br>';
+        } catch (exception $e) {
+            echo $domain, ' caught exception: ', $e->getmessage(), "<br>";
+        }
+    }
+    elseif (!empty($xml) && $json) {
         $json = json_encode($xml->xpath('//channel/item'));
         $array = json_decode($json, true);
-        //var_dump($array);
+
         foreach ($array as $k => $v) {
             $arr[$k]['title'] = $v['title'];
             $arr[$k]['url'] = $v['link'];
@@ -191,9 +280,9 @@ function parseFeed($feed, $domain = false, $test = false)
     //echo $domain;
     $filename = 'temp/' . $domain . '-parsed.json';
     if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 3600) {
+        if (time() - filemtime($filename) > 3600 || $test) {
             try {
-                if ($test === true) {
+                if ($test) {
                     parseXML($feed, $domain, true);
                 } else {parseXML($feed, $domain);}
             } catch (Exception $e) {
@@ -204,7 +293,7 @@ function parseFeed($feed, $domain = false, $test = false)
         }
     } else {
         try {
-            if ($test === true) {
+            if ($test) {
                 parseXML($feed, $domain, true);
             } else {parseXML($feed, $domain);}
         } catch (Exception $e) {
