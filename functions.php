@@ -1,5 +1,9 @@
 <?php
 
+$limit = 25; //Feed post limit (only applies to feeds, not subreddits)
+$feedtime = 3600; //Time for feed to pass to be eligible for update
+$subtime = 1717;
+
 function getUrl($base)
 {
     $ch = curl_init($base);
@@ -27,25 +31,22 @@ function getUrl($base)
 }
 $arr = array();
 
-#Isn't working for some reason
-global $refreshtime; 
-$refreshtime = 1717;#time to check before updating cache
-
 #First level of reddit sub parsing, get the subs, run the related functions
 function parseReddit($subs)
 {
+    global $subtime;
     foreach ($subs as $s) {
         $filename = 'temp/' . $s . '-parsed.json';
         if (file_exists($filename)) {
             #echo $domain, 'Last updated ', time() - filemtime($filename) ,' Update when older than: ', $refreshtime ,' ';
-            if (time() - filemtime($filename) > 1717) {
+            if (time() - filemtime($filename) > $subtime) {
                 try {
                     parseStore($s);
                 } catch (Exception $e) {
                     echo "Error: ", $e->getMessage, '<br>';
                 }
             } else {
-                echo 'already updated<br>';
+                echo $s . ': already updated<br>';
             }
         } else {
             try {
@@ -57,7 +58,10 @@ function parseReddit($subs)
     }
 }
 
-#Function to parse and store Reddit json file
+#
+# 2nd level of Reddit parsing
+# Function to parse and store Reddit json file
+#
 function parseStore($subs)
 {
     $top = 'https://reddit.com/r/' . $subs . '/top.json';
@@ -92,9 +96,14 @@ function parseStore($subs)
     }
 }
 
-#Parse XML File for feeds
-function parseXML($feed, $domain, $test = false, $json = false)
-{
+#
+# 2nd level of Feed parsing, 
+# When $test is true, it will output the SimpleXMLElement object
+# When $json is true, json encode/decode is used after SimpleXMLElement object. (slower in limited testing)
+# Parses XML File for feeds
+#
+function parseXML($feed, $domain, $test = false, $json = false){
+    global $limit;
     libxml_use_internal_errors(true);
     try {
         $xml = simplexml_load_string(getUrl($feed), 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -103,72 +112,31 @@ function parseXML($feed, $domain, $test = false, $json = false)
     }
     // Debug here when test is set to true
     if (!empty($xml) && $test) {
-        //First to uncomment for debug
-            // echo "<pre>";
-            // print_r($xml);
-            // echo "</pre>";
-        //First to uncomment for debug
-
-        // foreach ($xml->entry as $v) {
-        // echo $v->title. ' ' . $v->link['href'] . '</br>';
-        // }
-        //echo sizeof($xml->item);
-        // $json = json_encode($xml->xpath('/item'));
-        // $array = json_decode($json, true);
-        // echo "<pre>";
-        // print_r($array);
-        // echo "</pre>";
-        // $json = json_encode($xml->xpath('//channel/item'));
-        // $array = json_decode($json, true);
-        // foreach (array($xml->channel->item as $k => $v) {
-        //     echo $k. ' '. $v->title[0];
-
-        // }
-        // $k =0;
-        // foreach ($xml->channel->item as $v) {
-        //     $arr[$k]['title'] = (string)$v->title;
-        //     $arr[$k]['url'] = (string)$v->link;
-
-        //     //check comments link for ycombinator only
-        //     if ($domain == 'ycombinator') {
-        //         if (isset($v['comments'])) {
-        //             $arr[$k]['rurl'] = (string)$v->comments;
-        //             $arr[$k]['score'] = 'y';
-        //         }
-
-        //     }
-        //         $k++;
-        // }
-        // // var_dump($arr);
-        // $jd = json_encode($arr);
-        // $filename = 'temp/' . $domain . '-parsed.json';
-        // try {
-        //     file_put_contents($filename, $jd);
-        //     echo $domain . ': complete! <br>';
-        // } catch (exception $e) {
-        //     echo $domain, ' caught exception: ', $e->getmessage(), "<br>";
-        // }
-
+        //parse data for debug
+            echo "<pre>";
+            print_r($xml);
+            echo "</pre>";
     }
-    elseif(!empty($xml)){
+    elseif(!empty($xml) && !$json){
         $k =0;
         if($domain == "nature"){
             foreach ($xml->item as $v) {
                 $arr[$k]['title'] = (string)$v->title;
                 $arr[$k]['url'] = (string)$v->link;
                 $k++;
+                if ($k == $limit) break;
             }
-
         }
         elseif($domain == "producthunt"){
             foreach ($xml->entry as $v) {
                 $arr[$k]['title'] = (string)$v->title;
                 $arr[$k]['url'] = (string)$v->link['href'];
                 $k++;
+                if ($k == $limit) break;
             }
         }
-        else{
-            foreach ($xml->channel->item as $v) {
+        else{ //Generic RSS parsing, limited to 25 entries
+            foreach ($xml->channel->item  as $v) {
                 $arr[$k]['title'] = (string)$v->title;
                 $arr[$k]['url'] = (string)$v->link;
 
@@ -180,17 +148,15 @@ function parseXML($feed, $domain, $test = false, $json = false)
                     }
 
                 }
-                    $k++;
+                $k++;
+                if ($k == $limit) break;
             }
         }
         // var_dump($arr);
-        $jd = json_encode($arr);
-        $filename = 'temp/' . $domain . '-parsed.json';
-        try {
-            file_put_contents($filename, $jd);
-            echo $domain . ': complete! <br>';
-        } catch (exception $e) {
-            echo $domain, ' caught exception: ', $e->getmessage(), "<br>";
+        if(isset($arr)){
+        write_json($domain, $arr);
+        }else{
+            echo $domain . " array creation wasn't successful! <br>";
         }
     }
     elseif (!empty($xml) && $json) {
@@ -209,7 +175,7 @@ function parseXML($feed, $domain, $test = false, $json = false)
                 }
 
             }
-
+            //Image code
             // if (strpos($v['description'],'.jpg') >0){
             //     $re = '/https:\/\/.*.jpg/m';
             //     preg_match_all($re, $n->nodeValue, $matches, PREG_SET_ORDER, 0);
@@ -219,26 +185,36 @@ function parseXML($feed, $domain, $test = false, $json = false)
             // //echo $item['title'];
         }
         //var_dump($arr);
-        $jd = json_encode($arr);
-        $filename = 'temp/' . $domain . '-parsed.json';
-        try {
-            file_put_contents($filename, $jd);
-            echo $domain . ': complete! <br>';
-        } catch (Exception $e) {
-            echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
+        if(isset($arr)){
+        write_json($domain, $arr);
+        }else{
+            echo $domain . " array creation wasn't successful!<br>";
         }
     } else {
         echo $domain . " returned empty <br>";
     }
 }
 
-//Write json file to temp folder
-# Isn't used at the moment
+
+#Write json file to temp folder
 function write_json($domain, $array){
-    $jd = json_encode($array);
-    $filename = 'temp/' . $domain . '-parsed.json';
-    if (file_exists($filename)) {
-        if (time() - filemtime($filename) > 3600) {
+    global $feedtime;
+    if(is_array($array)){
+        $jd = json_encode($array);
+        $filename = 'temp/' . $domain . '-parsed.json';
+        if (file_exists($filename)) {
+            if (time() - filemtime($filename) > $feedtime) {
+                try {
+                    file_put_contents($filename, $jd);
+                    echo $domain . ': complete! <br>';
+                } catch (Exception $e) {
+                    echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
+                }
+            }
+            else {
+                echo $domain, ': already updated<br>';
+            }
+        }else{
             try {
                 file_put_contents($filename, $jd);
                 echo $domain . ': complete! <br>';
@@ -246,33 +222,14 @@ function write_json($domain, $array){
                 echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
             }
         }
-        else {
-            echo $domain, ' already updated<br>';
-        }
     }else{
-        try {
-            file_put_contents($filename, $jd);
-            echo $domain . ': complete! <br>';
-        } catch (Exception $e) {
-            echo $domain, ' caught exception: ', $e->getMessage(), "<br>";
-        }
+        echo "Array creation wasn't successful!";
     }
 }
 
-# To test the parsing without 
-function cparseFeed($feed)
-{
-    $xml = simplexml_load_string(getUrl($feed), 'SimpleXMLElement', LIBXML_NOCDATA);
-
-    $json = json_encode($xml->xpath('//channel/item'));
-    $array = json_decode($json, true);
-    var_dump($array);
-}
-
 #
-#Test uses var_dump to output the result
-function parseFeed($feed, $domain = false, $test = false)
-{
+#Test uses print_r to output the result
+function parseFeed($feed, $domain = false, $test = false){
     if ($domain === false) {
         #Special edge cases where domain names aren't extracted properly. as in links from RSSMix and locally made
         $domain = (strpos(parse_url($feed)['host'], 'nlk.fly.dev') !== false || strpos(parse_url($feed)['host'], 'rssmix.com') !== false) ? explode('/', parse_url($feed)['path'])[2] : preg_replace('/.*\./', '', preg_replace('/(\.com|\.net|\.org)/', '', parse_url($feed)['host']));
@@ -289,7 +246,7 @@ function parseFeed($feed, $domain = false, $test = false)
                 echo $domain, " error: ", $e->getMessage, '<br>';
             }
         } else {
-            echo $domain, ' already updated<br>';
+            echo $domain, ': already updated<br>';
         }
     } else {
         try {

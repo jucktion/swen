@@ -47,3 +47,4 @@ $etime = microtime(true);
 $exc_time = ($etime - $stime);
 echo "<p>Script ran in ".$exc_time." sec</p>";
 }
+die();
