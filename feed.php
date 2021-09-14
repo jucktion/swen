@@ -32,16 +32,17 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
     parseFeed('http://feeds.feedburner.com/scienctistnew?format=xml','newscientist');
-    parsefeed('https://feeds.bbci.co.uk/news/world/rss.xml');
+    parseFeed('https://feeds.bbci.co.uk/news/world/rss.xml');
     parsefeed('https://www.npr.org/rss/rss.php?id=1001');
-    parsefeed('https://www.theguardian.com/world/rss');
-    parsefeed('https://www.onlinekhabar.com/feed');
-    parsefeed('https://www.setopati.com/feed');
-    parsefeed('https://www.producthunt.com/feed','producthunt');
-    parsefeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
-    parsefeed('https://dev.to/feed/','devto');
-    parsefeed('https://www.freecodecamp.org/news/rss/','fcc');
-    parsefeed('https://www.goodnewsnetwork.org/feed/','positive');
+    parseFeed('https://www.theguardian.com/world/rss');
+    parseFeed('https://www.onlinekhabar.com/feed');
+    parseFeed('https://www.setopati.com/feed');
+    ParseFeed('https://wkn.herokuapp.com/f/ntc/i.xml','ntc');
+    parseFeed('https://www.producthunt.com/feed','producthunt');
+    parseFeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
+    parseFeed('https://dev.to/feed/','devto');
+    parseFeed('https://www.freecodecamp.org/news/rss/','fcc');
+    parseFeed('https://www.goodnewsnetwork.org/feed/','positive');
 }
 $etime = microtime(true);
 $exc_time = ($etime - $stime);
