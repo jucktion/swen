@@ -27,7 +27,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     # One per line 
     #
     parseFeed('https://hnrss.org/frontpage', 'ycombinator');
-    parseFeed('http://feeds.feedburner.com/TechCrunch?format=xml', 'techcrunch');
+    parseFeed('https://techcrunch.com/feed/', 'techcrunch');
     parseFeed('http://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('http://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
