@@ -153,5 +153,5 @@ kathmandupost();
 himalayantimes();
 bbcnp();
 sharesansarIPO();
-//parseQFX();
+parseQFX();
 }
