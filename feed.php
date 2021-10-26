@@ -46,6 +46,6 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
 }
 $etime = microtime(true);
 $exc_time = ($etime - $stime);
-echo "<p>Script ran in ".$exc_time." sec</p>";
+echo "<p>Script completed in ".$exc_time." sec</p>";
 }
 die();
