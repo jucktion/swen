@@ -79,7 +79,7 @@ function parseStore($subs)
             $arr[$k]['title'] = $v['data']['title'];
             $arr[$k]['url'] = $v['data']['url'];
             $arr[$k]['user'] = $v['data']['name'];
-            $arr[$k]['rurl'] = 'https://reddit.com' . $v['data']['permalink'];
+            $arr[$k]['rurl'] = $v['data']['permalink'];
             $arr[$k]['image'] = $v['data']['thumbnail'];
             $arr[$k]['score'] = $v['data']['score'];
         }
