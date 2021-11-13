@@ -143,7 +143,7 @@ function parseXML($feed, $domain, $test = false, $json = false){
                 //check comments link for ycombinator only
                 if ($domain == 'ycombinator') {
                     if ($v->comments) {
-                        $arr[$k]['rurl'] = (string)$v->comments;
+                        $arr[$k]['yurl'] = (string)$v->comments;
                         $arr[$k]['score'] = 'Y';
                     }
 

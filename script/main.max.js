@@ -151,7 +151,11 @@ Vue.component('tab', {
     template: `
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
+        <li v-for="link,index in this.linklist">
+        <span class="itm">{{index+1}}</span>
+        <a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
+        <a v-if="link.yurl" target="_blank" :href="link.yurl">[{{link.score}}]</a>
+        <a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
