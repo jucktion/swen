@@ -29,6 +29,7 @@ function getContent(url, methodType = 'GET', callback) {
 // Not used in a vue component because this only needs to happen once.
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
+let lg = url.searchParams.get("l");
 
 Vue.component('partabs', {
     template: `
@@ -315,8 +316,9 @@ Vue.component('voice', {
             }
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
-            s.then((voices) => {
-                this.voices = this.synth.getVoices();
+            s.then((voices) => {    
+                this.voices = (lg) ? speechSynthesis.getVoices().filter(function(voice) {
+return voice.lang.indexOf(lg) != -1;}) : this.synth.getVoices();
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
             });
             
