@@ -317,7 +317,7 @@ Vue.component('voice', {
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
             s.then((voices) => {    
-                this.voices = (lg) ? speechSynthesis.getVoices().filter(function(voice) {
+                this.voices = (lg) ? this.synth.getVoices().filter(function(voice) {
 return voice.lang.indexOf(lg) != -1;}) : this.synth.getVoices();
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
             });
