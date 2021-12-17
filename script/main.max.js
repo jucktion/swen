@@ -29,7 +29,7 @@ function getContent(url, methodType = 'GET', callback) {
 // Not used in a vue component because this only needs to happen once.
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
-let lg = url.searchParams.get("l");
+let lg = (url.searchParams.get("l") === null) ? '': (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '' ;
 
 Vue.component('partabs', {
     template: `
@@ -302,12 +302,10 @@ Vue.component('voice', {
             function setSpeech() {
                 return new Promise(
                     function (resolve, reject) {
-                        let synth = window.speechSynthesis;
                         let id;
-            
                         id = setInterval(() => {
-                            if (synth.getVoices().length !== 0) {
-                                resolve(synth.getVoices());
+                            if (window.speechSynthesis.getVoices().length !== 0) {
+                                resolve(window.speechSynthesis.getVoices());
                                 clearInterval(id);
                             }
                         }, 10);
@@ -317,11 +315,10 @@ Vue.component('voice', {
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
             s.then((voices) => {    
-                this.voices = (lg) ? this.synth.getVoices().filter(function(voice) {
-return voice.lang.indexOf(lg) != -1;}) : this.synth.getVoices();
+                this.voices = (lg) ? voices.filter(function(voice) {
+return voice.lang.indexOf(lg) != -1;}) : voices;
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
-            });
-            
+            }); 
         },
         speaker:function(){
             //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis

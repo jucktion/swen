@@ -1,4 +1,4 @@
-let url = new URL(document.URL);let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';let lg = url.searchParams.get("l");
+let url = new URL(document.URL);let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';let lg=(url.searchParams.get("l")===null)?'':(url.searchParams.get("l")=='')?navigator.language:(url.searchParams.get("l").length>0)?url.searchParams.get("l"):'';
 function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
 Vue.component('partabs',{template:`
     <div>
@@ -73,8 +73,8 @@ this.setData();},methods:{setData:function(){if(this.isActive){let now=this;let 
 </div>
     `,data(){return{settingsShown:false,stopShown:false,showFab:false,svg:'/img/play.svg',speak:[],saythis:null,pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){this.showFab=('speechSynthesis'in window);if(this.showFab){this.loadVoices();this.synth.cancel();}
 let mq=window.matchMedia("(max-width: 512px)").matches;if(!mq)
-window.addEventListener('scroll',this.onScroll);},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let synth=window.speechSynthesis;let id;id=setInterval(()=>{if(synth.getVoices().length!==0){resolve(synth.getVoices());clearInterval(id);}},10);})}
-let s=setSpeech();s.then((voices)=>{this.voices=lg?this.synth.getVoices().filter(function(voice){return voice.lang.indexOf(lg) != -1;}):this.synth.getVoices();});},speaker:function(){if(this.saythis==null&&!this.synth.speaking){this.speak=this.$root.voice.map(x=>x.title);this.saythis=this.speak.slice(this.startItem-1,this.endItem).join(this.separator);}
+window.addEventListener('scroll',this.onScroll);},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let id;id=setInterval(()=>{if(window.speechSynthesis.getVoices().length!==0){resolve(window.speechSynthesis.getVoices());clearInterval(id);}},10);})}
+let s=setSpeech();s.then((voices)=>{this.voices=lg?voices.filter(function(voice){return voice.lang.indexOf(lg) != -1;}):voices;});},speaker:function(){if(this.saythis==null&&!this.synth.speaking){this.speak=this.$root.voice.map(x=>x.title);this.saythis=this.speak.slice(this.startItem-1,this.endItem).join(this.separator);}
 if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.playPause(0);return;}
 else if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.playPause(1);return;}
 else if(!this.synth.paused&&this.saythis!=null){let utterThis=new SpeechSynthesisUtterance(this.saythis);this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
