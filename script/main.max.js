@@ -1,4 +1,4 @@
-Vue.config.devtools = true;
+Vue.config.devtools = false;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -37,7 +37,7 @@ Vue.component('partabs', {
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title">{{tab.title}}</a></li>
+                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
             </ul>
         </diV>
         <div class='tab-details'>

@@ -1,10 +1,9 @@
-let url = new URL(document.URL);let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';let lg=(url.searchParams.get("l")===null)?'':(url.searchParams.get("l")=='')?navigator.language:(url.searchParams.get("l").length>0)?url.searchParams.get("l"):'';
-function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
-Vue.component('partabs',{template:`
+Vue.config.devtools=false;function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
+let url=new URL(document.URL);let rd=(url.searchParams.get("r"))?'https://'+url.searchParams.get("r"):'https://reddit.com';let lg=(url.searchParams.get("l")===null)?'':(url.searchParams.get("l")=='')?navigator.language:(url.searchParams.get("l").length>0)?url.searchParams.get("l"):'';let hs=(window.location.hash!='')?window.location.hash.split('#')[1].toLowerCase():'';Vue.component('partabs',{template:`
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title">{{tab.title}}</a></li>
+                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
             </ul>
         </diV>
         <div class='tab-details'>
@@ -12,8 +11,9 @@ Vue.component('partabs',{template:`
         </div>
 
     </div>
-    `,data(){return{chitabs:[]};},created(){this.chitabs=this.$children;},methods:{selectTab:function(selectedtab){this.chitabs.forEach(tab=>{tab.isActive=(tab.title==selectedtab.title);if(tab.title==selectedtab.title)
-tab.setChildActive();});}}});Vue.component('chitab',{template:`
+    `,data(){return{chitabs:[]};},created(){this.chitabs=this.$children;},mounted(){this.hashActivate();},methods:{selectTab:function(selectedtab){this.chitabs.forEach(tab=>{tab.isActive=(tab.title==selectedtab.title);if(tab.title==selectedtab.title)
+tab.setChildActive();});},hashActivate:function(){if(hs!=''){this.chitabs.forEach(tab=>{if(tab.title.toLowerCase()==hs){tab.isActive=tab.selected=true;tab.setChildActive();}});}
+else{this.chitabs[0].isActive=this.chitabs[0].selected=true;this.chitabs[0].setChildActive();}}}});Vue.component('chitab',{template:`
     <div v-show="isActive" class='tab-details'>
         <slot></slot>
     </div>
@@ -21,7 +21,7 @@ tab.setChildActive();});}}});Vue.component('chitab',{template:`
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title">{{tab.title}}</a></li>
+                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
@@ -32,7 +32,11 @@ tab.setChildActive();});}}});Vue.component('chitab',{template:`
 if(tab.name==selectedtab.name){tab.current=true;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
-        <li v-for="link,index in this.linklist"><span class="itm">{{index+1}}</span><a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a><a v-if="link.yurl" target="_blank" :href="link.yurl">[{{link.score}}]</a><a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
+        <li v-for="link,index in this.linklist">
+        <span class="itm">{{index+1}}</span>
+        <a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
+        <a v-if="link.com" target="_blank" :href="link.com">[{{link.score}}]</a>
+        <a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -74,7 +78,7 @@ this.setData();},methods:{setData:function(){if(this.isActive){let now=this;let 
     `,data(){return{settingsShown:false,stopShown:false,showFab:false,svg:'/img/play.svg',speak:[],saythis:null,pitch:1,rate:1,separator:'.... and in other news ....',synth:window.speechSynthesis,voices:[],selectedVoice:0,startItem:1,endItem:25}},mounted(){this.showFab=('speechSynthesis'in window);if(this.showFab){this.loadVoices();this.synth.cancel();}
 let mq=window.matchMedia("(max-width: 512px)").matches;if(!mq)
 window.addEventListener('scroll',this.onScroll);},beforeDestroy(){window.removeEventListener('scroll',this.onScroll)},methods:{loadVoices:function(){function setSpeech(){return new Promise(function(resolve,reject){let id;id=setInterval(()=>{if(window.speechSynthesis.getVoices().length!==0){resolve(window.speechSynthesis.getVoices());clearInterval(id);}},10);})}
-let s=setSpeech();s.then((voices)=>{this.voices=lg?voices.filter(function(voice){return voice.lang.indexOf(lg) != -1;}):voices;});},speaker:function(){if(this.saythis==null&&!this.synth.speaking){this.speak=this.$root.voice.map(x=>x.title);this.saythis=this.speak.slice(this.startItem-1,this.endItem).join(this.separator);}
+let s=setSpeech();s.then((voices)=>{this.voices=(lg)?voices.filter(function(voice){return voice.lang.indexOf(lg)!=-1;}):voices;});},speaker:function(){if(this.saythis==null&&!this.synth.speaking){this.speak=this.$root.voice.map(x=>x.title);this.saythis=this.speak.slice(this.startItem-1,this.endItem).join(this.separator);}
 if(this.synth.speaking&&!this.synth.paused){this.synth.pause();this.playPause(0);return;}
 else if(this.synth.paused&&this.synth.speaking){this.synth.resume();this.playPause(1);return;}
 else if(!this.synth.paused&&this.saythis!=null){let utterThis=new SpeechSynthesisUtterance(this.saythis);this.stopShown=true;now=this;utterThis.onend=function(event){now.stopSpeak();}
