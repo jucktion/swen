@@ -43,6 +43,11 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://dev.to/feed/','devto');
     parseFeed('https://www.freecodecamp.org/news/rss/','fcc');
     parseFeed('https://www.goodnewsnetwork.org/feed/','positive');
+    parseFeed('https://medicalxpress.com/rss-feed/','medx');
+    parseFeed('https://techxplore.com/rss-feed/','techx');
+    parseFeed('https://css-tricks.com/feed/','csstricks');
+    parseFeed('https://lobste.rs/top/rss','lobsters');
+
 }
 $etime = microtime(true);
 $exc_time = ($etime - $stime);

@@ -1,4 +1,4 @@
-//Vue.config.devtools = true;
+Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -155,7 +155,7 @@ Vue.component('tab', {
         <li v-for="link,index in this.linklist">
         <span class="itm">{{index+1}}</span>
         <a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
-        <a v-if="link.yurl" target="_blank" :href="link.yurl">[{{link.score}}]</a>
+        <a v-if="link.com" target="_blank" :href="link.com">[{{link.score}}]</a>
         <a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
