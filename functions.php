@@ -75,13 +75,13 @@ function parseStore($subs)
         $data = json_decode($lv, true);
         $datad = $data['data']['children'];
         foreach ($datad as $k => $v) {
-            #echo '<a href="'.$d['data']['url'].'">'.$d['data']['title'].'</a> via:<a href="'.$d['data']['permalink'].'">'.$d['data']['name'].'</a></br>';
             $arr[$k]['title'] = $v['data']['title'];
             $arr[$k]['url'] = $v['data']['url'];
-            $arr[$k]['user'] = $v['data']['name'];
             $arr[$k]['rurl'] = $v['data']['permalink'];
-            $arr[$k]['image'] = $v['data']['thumbnail'];
             $arr[$k]['score'] = $v['data']['score'];
+                        // $arr[$k]['user'] = $v['data']['name'];
+            // $arr[$k]['image'] = $v['data']['thumbnail'];
+            // echo '<a href="'.$d['data']['url'].'">'.$d['data']['title'].'</a> via:<a href="'.$d['data']['permalink'].'">'.$d['data']['name'].'</a></br>';
         }
         $jd = json_encode($arr);
         if (isset($arr)) {

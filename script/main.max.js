@@ -30,6 +30,7 @@ function getContent(url, methodType = 'GET', callback) {
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
 let lg = (url.searchParams.get("l") === null) ? '': (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '' ;
+let hs = (window.location.hash != '') ? window.location.hash.split('#')[1].toLowerCase() : '';
 
 Vue.component('partabs', {
     template: `
@@ -52,6 +53,10 @@ Vue.component('partabs', {
     },
     created() {
         this.chitabs = this.$children;
+        
+    },
+    mounted(){
+        this.hashActivate();
     },
     methods: {
         selectTab: function (selectedtab) {
@@ -68,7 +73,23 @@ Vue.component('partabs', {
                     if(tab.title == selectedtab.title)
                         tab.setChildActive();
             });
+        },
+        hashActivate: function(){
+            if(hs != ''){
+            this.chitabs.forEach(tab => {
+                if(tab.title.toLowerCase() == hs){
+                tab.isActive = tab.selected = true;
+                tab.setChildActive();
+                }
+            });
+            }
+            else{
+                this.chitabs[0].isActive = this.chitabs[0].selected = true;
+                this.chitabs[0].setChildActive();
+            }
+
         }
+
     }
 
 });
@@ -106,7 +127,7 @@ Vue.component('tabs', {
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title">{{tab.title}}</a></li>
+                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
