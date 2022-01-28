@@ -238,6 +238,13 @@ div.content{
         color: #555;
         text-shadow: 1px 1px 0 #fff !important;
     }
+    .play, .settings{
+        background-color: #fff !important;
+        box-shadow: 0 0 5px 1px #000 !important;
+    }
+    .fab img{
+        filter: invert(100%);
+    }
 }
 @media screen and (min-width:1024px){
     .navbar{
