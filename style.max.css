@@ -243,7 +243,7 @@ div.content{
         box-shadow: 0 0 5px 1px #000 !important;
     }
     .fab img{
-        filter: invert(100%);
+        filter: none !important;
     }
 }
 @media screen and (min-width:1024px){
@@ -360,4 +360,7 @@ div > input {
 .play img {
     height: 3rem;
     width: 1.5rem;
+}
+.fab img{
+    filter: invert(100%);
 }
