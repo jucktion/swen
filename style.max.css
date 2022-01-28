@@ -238,7 +238,6 @@ div.content{
         color: #555;
         text-shadow: 1px 1px 0 #fff !important;
     }
-<<<<<<< HEAD
     .play, .settings{
         background-color: #fff !important;
         box-shadow: 0 0 5px 1px #000 !important;
@@ -246,8 +245,6 @@ div.content{
     .fab img{
         filter: none !important;
     }
-=======
->>>>>>> parent of a50502a (fix for svg light scheme)
 }
 @media screen and (min-width:1024px){
     .navbar{
