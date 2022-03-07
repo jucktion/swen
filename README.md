@@ -10,7 +10,7 @@ The script fetches the destinations using php-curl, processes the content, and s
 
 ### Backend
 
-The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `temp` folder. 
+The `feed.php` file is the processing hub of this project. It contains the sub reddits and feeds that are to be fetched and processed. A `cron job` is set to run in an interval to retrive the data and process it into `json` files in the `\temp` folder.
 
 The core functions are present in `functions.php`. For setting up, you do not need to edit the `functions.php` file. By default, the `top` list of the subreddit is requested. 
 
@@ -19,10 +19,10 @@ The `$subs` variable is an array that contains the name of the subreddits to be 
 
 For subreddits, the name of the subreddit is used in the parsed json file.
 
-E.g. for `worldnews` subreddit, the file would be saved as `worldnews-parsed.json`.
+E.g. For `worldnews` subreddit, the file would be saved as `worldnews-parsed.json`.
 
 #### RSS Feeds:
-For parsed feeds, there is some rudimentary naming process to use the domain name for the parsed file name. It might not work with sub-domains and complicated URLs. It is easier if you a specific name is provided using the `parsefeed(feed_link, name)` function. Which takes two arguments, the RSS feed link and the name prepended to the parsed json file.
+For parsing feeds, there is some rudimentary name extraction process to use the domain name for the parsed file name. It might not work with sub-domains and complicated URLs. It is easier if you a specific name is provided using the `parsefeed(feed_link, name)` syntax. Which takes two arguments, the RSS feed link and the name prepended to the parsed json file.
 
 E.g.
 
@@ -38,10 +38,17 @@ Note: The sparser.php is a simple html parser to parse HTML into json made for s
 
 An simple URL query string parameter `k` is used to prevent unauthorized requests for processing the feeds
 
-If you use `run123` value for `k`, a valid link to process the feeds will be:
+To use it in production, it is important that you have `SWEN_KEY` environment variable set. For local testing, if the environement variable is not set or is empty, the update will run with with just `/feed.php?k`. If more secure method can be used, please raise an issue.
+
+With `SWEN_KEY` set to `run123`
 
 ```
 https://domain.com/feed.php?k=run123
+```
+Without any environment variable set
+
+```
+https://domain.com/feed.php?k
 ```
 
 ### Frontend
