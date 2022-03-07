@@ -2,7 +2,7 @@
 
 Collect news in a single place for Reddit subs and RSS feeds. The Text-to-Speech (TTS) helps you listen to your news. The TTS management settings help you configure the TTS sounds available on your device. Additionally, you can set pitch, speed and interval configuration.
 
-![Screenshot]('screenshot.png?raw=true')
+![Screenshot](screenshot.png?raw=true)
 
 ## Getting Started
 
