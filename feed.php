@@ -1,5 +1,6 @@
 <?php
-if (isset($_GET['k']) && $_GET['k'] == 'JuckTion321123'){
+$key = !empty(strval(getenv('SWEN_KEY'))) ? strval(getenv('SWEN_KEY')) : '';
+if (isset($_GET['k']) && $_GET['k'] == $key){
 ini_set("max_execution_time", "600");
 $stime = microtime(true);
 include_once 'functions.php';
