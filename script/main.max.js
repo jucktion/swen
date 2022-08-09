@@ -1,4 +1,4 @@
-Vue.config.devtools = false;
+Vue.config.devtools = true;
 function getContent(url, methodType = 'GET', callback) {
     let xhr = new XMLHttpRequest();
     xhr.open(methodType, url, true);
@@ -16,10 +16,10 @@ function getContent(url, methodType = 'GET', callback) {
                     callback.apply(xhr);
                 }
             } else {
-               //// console.log("xhr failed");
+                //// console.log("xhr failed");
             }
         } else {
-           //// console.log("xhr processing going on");
+            //// console.log("xhr processing going on");
         }
     }
     //// console.log("request sent succesfully");
@@ -29,7 +29,7 @@ function getContent(url, methodType = 'GET', callback) {
 // Not used in a vue component because this only needs to happen once.
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
-let lg = (url.searchParams.get("l") === null) ? '': (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '' ;
+let lg = (url.searchParams.get("l") === null) ? '' : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
 let hs = (window.location.hash != '') ? window.location.hash.split('#')[1].toLowerCase() : '';
 
 Vue.component('partabs', {
@@ -53,37 +53,42 @@ Vue.component('partabs', {
     },
     created() {
         this.chitabs = this.$children;
-        
+
     },
-    mounted(){
+    mounted() {
         this.hashActivate();
     },
     methods: {
         selectTab: function (selectedtab) {
             this.chitabs.forEach(tab => {
-                    tab.isActive = (tab.title == selectedtab.title);
-                    //
-                    //  This simulates function execution, one after another through the heirarchy
-                    //1. Loops through titles on 'chitab' component, if it matches the one clicked
-                    //  a.Executes the setChildActive() function in 'chitab' component
-                    //2. setChildActive() then follows through to execute selectDef() function on the first child in 'tabs' component
-                    //  a.selectDef uses the selectTab() function with the first child element of its 'tab' component
-                    //  b.which simulates clicking of the first tab in the 'tab' component
-                    //
-                    if(tab.title == selectedtab.title)
-                        tab.setChildActive();
+                tab.isActive = (tab.title == selectedtab.title);
+                //
+                //  This simulates function execution, one after another through the heirarchy
+                //1. Loops through titles on 'chitab' component, if it matches the one clicked
+                //  a.Executes the setChildActive() function in 'chitab' component
+                //2. setChildActive() then follows through to execute selectDef() function on the first child in 'tabs' component
+                //  a.selectDef uses the selectTab() function with the first child element of its 'tab' component
+                //  b.which simulates clicking of the first tab in the 'tab' component
+                //
+                if (tab.title == selectedtab.title) {
+                    tab.setChildActive();
+
+                }
+
             });
         },
-        hashActivate: function(){
-            if(hs != ''){
-            this.chitabs.forEach(tab => {
-                if(tab.title.toLowerCase() == hs){
-                tab.isActive = tab.selected = true;
-                tab.setChildActive();
-                }
-            });
+        hashActivate: function () {
+            if (hs != '') {
+                this.chitabs.forEach(tab => {
+                    if (tab.title.toLowerCase() == hs) {
+                        tab.isActive = tab.selected = true;
+                        tab.setChildActive();
+
+                    }
+
+                });
             }
-            else{
+            else {
                 this.chitabs[0].isActive = this.chitabs[0].selected = true;
                 this.chitabs[0].setChildActive();
             }
@@ -115,8 +120,8 @@ Vue.component('chitab', {
     mounted() {
         this.isActive = this.selected;
     },
-    methods:{   
-        setChildActive: function(){
+    methods: {
+        setChildActive: function () {
             this.$children[0].selectDef();
         }
     }
@@ -148,20 +153,26 @@ Vue.component('tabs', {
         selectTab: function (selectedtab) {
             this.tabs.forEach(tab => {
                 tab.isActive = (tab.name == selectedtab.name);
-                if (!tab.isLoaded) {
-                    if (tab.name == selectedtab.name) {
+                if (tab.name == selectedtab.name) {
+                    if (!tab.isLoaded) {
                         tab.setData();
                     }
-                }
-                if(tab.name == selectedtab.name){
+
                     tab.current = true;
-                    if (tab.isLoaded && tab.isActive && tab.current){
+                    console.log(tab.name);
+                    if (tab.isLoaded && tab.isActive && tab.current) {
                         tab.setVoice();
                     }
                 }
+                // if(tab.name == selectedtab.name){
+                //     tab.current = true;
+                //     if (tab.isLoaded && tab.isActive && tab.current){
+                //         tab.setVoice();
+                //     }
+                // }
             });
         },
-        selectDef:function(){
+        selectDef: function () {
             //console.log('run selectDef');
             //console.log(this.name,this.$children[0].name)
             this.selectTab(this.$children[0]);
@@ -192,8 +203,8 @@ Vue.component('tab', {
         title: {
             required: true
         },
-        voice:{
-            default:false
+        voice: {
+            default: false
         }
     },
     data() {
@@ -211,7 +222,7 @@ Vue.component('tab', {
     updated() {
         //runs twice, needs debug
         //console.log('@tab:updated',this.name, this.$parent.isActive)
-        if (this.$parent.isActive && this.isActive && !this.isLoaded){
+        if (this.$parent.isActive && this.isActive && !this.isLoaded) {
             this.current = true;
             this.setData();
             this.setVoice();
@@ -236,7 +247,7 @@ Vue.component('tab', {
                 });
             }
         },
-        setVoice: function (){
+        setVoice: function () {
             if (this.current && this.isActive) {
                 this.$root.voice = this.linklist;
             }
@@ -248,11 +259,11 @@ Vue.component('tab', {
             const doc = new DOMParser().parseFromString(str, "text/html");
             return doc.documentElement.textContent;
         }
-           
+
     }
 });
 Vue.component('voice', {
-    template:`
+    template: `
 <div v-show="showFab" class="voice-section">
 <div class="fab">
     <div class="settings" @click="settingsShown = !settingsShown"><img src="/img/settings.svg" alt="Voice settings"></div>
@@ -284,8 +295,8 @@ Vue.component('voice', {
 </div>
 </div>
     `,
-    data(){
-        return{
+    data() {
+        return {
             settingsShown: false,
             stopShown: false,
             showFab: false,
@@ -297,28 +308,28 @@ Vue.component('voice', {
             separator: '.... and in other news ....',
             synth: window.speechSynthesis,
             voices: [],
-            selectedVoice : 0,
+            selectedVoice: 0,
             startItem: 1,
             endItem: 25
         }
     },
-    mounted(){
+    mounted() {
         //check if browser support speech synthesis, if it does, display the TTS FAB. 
         this.showFab = ('speechSynthesis' in window);
-        if (this.showFab){
+        if (this.showFab) {
             this.loadVoices();
             this.synth.cancel();
         }
         //since hiding FAB onScroll function isn't working, disable it on mobile devices
         let mq = window.matchMedia("(max-width: 512px)").matches;
         if (!mq)
-        window.addEventListener('scroll', this.onScroll);
+            window.addEventListener('scroll', this.onScroll);
     },
-    beforeDestroy () {
+    beforeDestroy() {
         window.removeEventListener('scroll', this.onScroll)
     },
-    methods:{
-        loadVoices: function(){
+    methods: {
+        loadVoices: function () {
             //https://stackoverflow.com/a/52005323
             function setSpeech() {
                 return new Promise(
@@ -335,19 +346,20 @@ Vue.component('voice', {
             }
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
-            s.then((voices) => {    
-                this.voices = (lg) ? voices.filter(function(voice) {
-return voice.lang.indexOf(lg) != -1;}) : voices;
+            s.then((voices) => {
+                this.voices = (lg) ? voices.filter(function (voice) {
+                    return voice.lang.indexOf(lg) != -1;
+                }) : voices;
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
-            }); 
+            });
         },
-        speaker:function(){
+        speaker: function () {
             //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
-            if (this.saythis == null && !this.synth.speaking){
+            if (this.saythis == null && !this.synth.speaking) {
                 this.speak = this.$root.voice.map(x => x.title);
-                this.saythis = this.speak.slice(this.startItem-1,this.endItem).join(this.separator);
+                this.saythis = this.speak.slice(this.startItem - 1, this.endItem).join(this.separator);
             }
-            
+
             if (this.synth.speaking && !this.synth.paused) {
                 this.synth.pause();
                 this.playPause(0);
@@ -360,35 +372,35 @@ return voice.lang.indexOf(lg) != -1;}) : voices;
                 return;
                 //console.log('speechSynthesis.resumed');    
             }
-            else if (!this.synth.paused && this.saythis != null){
+            else if (!this.synth.paused && this.saythis != null) {
                 let utterThis = new SpeechSynthesisUtterance(this.saythis);
                 this.stopShown = true;
-                    now = this;
-                    utterThis.onend = function (event) {
-                        now.stopSpeak();
-                        //console.log('SpeechSynthesisUtterance.onend');
-                    }
-                    utterThis.onerror = function (event) {
-                        console.error('SpeechSynthesisUtterance.onerror');
-                    }
-                    utterThis.voice = this.voices[this.selectedVoice];
-                    utterThis.pitch = this.pitch;
-                    utterThis.rate = this.rate;
-                    this.synth.speak(utterThis);
-                    this.playPause(1);
-            }            
+                now = this;
+                utterThis.onend = function (event) {
+                    now.stopSpeak();
+                    //console.log('SpeechSynthesisUtterance.onend');
+                }
+                utterThis.onerror = function (event) {
+                    console.error('SpeechSynthesisUtterance.onerror');
+                }
+                utterThis.voice = this.voices[this.selectedVoice];
+                utterThis.pitch = this.pitch;
+                utterThis.rate = this.rate;
+                this.synth.speak(utterThis);
+                this.playPause(1);
+            }
         },
-        stopSpeak:function(){
-                this.synth.cancel();
-                this.stopShown = false;
-                this.saythis = null;
-                this.playPause(0);
-                //console.error('speechSynthesis.speaking');
+        stopSpeak: function () {
+            this.synth.cancel();
+            this.stopShown = false;
+            this.saythis = null;
+            this.playPause(0);
+            //console.error('speechSynthesis.speaking');
         },
-        playPause: function(talking){
+        playPause: function (talking) {
             this.svg = talking == 0 ? '/img/play.svg' : '/img/pause.svg';
         },
-        onScroll: function(){
+        onScroll: function () {
             this.showFab = (window.innerHeight + window.scrollY) != document.body.offsetHeight;
         }
     }
@@ -397,9 +409,9 @@ return voice.lang.indexOf(lg) != -1;}) : voices;
 
 let vm = new Vue({
     el: '#app',
-    data(){
+    data() {
         return {
-            voice:[]
+            voice: []
         }
     }
 });
