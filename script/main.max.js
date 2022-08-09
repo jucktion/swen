@@ -30,9 +30,9 @@ function getContent(url, methodType = 'GET', callback) {
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
 let lg = (url.searchParams.get("l") === null) ? '' : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
-let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].toLowerCase() : '';
-let h1 = hash.split(',')[0];
-let h2 = hash.split(',')[1];
+let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].split(',') : '';
+let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : '';
+let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : '';
 
 Vue.component('partabs', {
     template: `
@@ -84,13 +84,14 @@ Vue.component('partabs', {
                 this.chitabs.forEach(tab => {
                     if (tab.title.toLowerCase() == h1) {
                         tab.isActive = tab.selected = true;
-                        tab.setChildActive();
+                        if (h2 == '')
+                            tab.setChildActive();
 
                     }
 
                 });
             }
-            else {
+            else if (h1 == '' && h2 == '') {
                 this.chitabs[0].isActive = this.chitabs[0].selected = true;
                 this.chitabs[0].setChildActive();
             }
@@ -134,7 +135,7 @@ Vue.component('tabs', {
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.title.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
+                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.name.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
@@ -151,27 +152,49 @@ Vue.component('tabs', {
     created() {
         this.tabs = this.$children;
     },
+    mounted() {
+        this.hashActivate()
+    },
     methods: {
         selectTab: function (selectedtab) {
             this.tabs.forEach(tab => {
-                tab.isActive = (tab.name == selectedtab.name);
+                tab.isActive = tab.current = (tab.name == selectedtab.name);
                 if (tab.name == selectedtab.name) {
                     if (!tab.isLoaded) {
                         tab.setData();
                     }
-
                     tab.current = true;;
                     if (tab.isLoaded && tab.isActive && tab.current) {
                         tab.setVoice();
                     }
                 }
-                // if(tab.name == selectedtab.name){
-                //     tab.current = true;
-                //     if (tab.isLoaded && tab.isActive && tab.current){
-                //         tab.setVoice();
-                //     }
-                // }
             });
+        },
+        hashActivate: function () {
+            if (h2 != '') {
+                this.tabs.forEach(tab => {
+                    tabname = tab.name;
+                    console.log(h2, tabname);
+                    if (tabname == h2) {
+
+                        tab.isActive = tab.current = (tabname == h2);
+                        if (tabname == h2) {
+                            if (!tab.isLoaded) {
+                                tab.setData();
+                            }
+                            tab.current = true;;
+                            if (tab.isLoaded && tab.isActive && tab.current) {
+                                tab.setVoice();
+                            }
+                        }
+                    }
+
+                });
+            }
+            else {
+                this.tabs[0].isActive = this.tabs[0].selected = true;
+            }
+
         },
         selectDef: function () {
             //console.log('run selectDef');
