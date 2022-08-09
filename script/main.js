@@ -1,5 +1,5 @@
-Vue.config.devtools=false;function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
-let url=new URL(document.URL);let rd=(url.searchParams.get("r"))?'https://'+url.searchParams.get("r"):'https://reddit.com';let lg=(url.searchParams.get("l")===null)?'':(url.searchParams.get("l")=='')?navigator.language:(url.searchParams.get("l").length>0)?url.searchParams.get("l"):'';let hs=(window.location.hash!='')?window.location.hash.split('#')[1].toLowerCase():'';Vue.component('partabs',{template:`
+Vue.config.devtools=true;function getContent(url,methodType='GET',callback){let xhr=new XMLHttpRequest();xhr.open(methodType,url,true);xhr.send();xhr.onreadystatechange=function(){if(xhr.readyState===4){if(xhr.status===200){let resp=xhr.responseText;if(typeof callback==="function"){callback.apply(xhr);}}else{}}else{}}}
+let url=new URL(document.URL);let rd=(url.searchParams.get("r"))?'https://'+url.searchParams.get("r"):'https://reddit.com';let lg=(url.searchParams.get("l")===null)?'':(url.searchParams.get("l")=='')?navigator.language:(url.searchParams.get("l").length>0)?url.searchParams.get("l"):'';let hash=(window.location.hash!='')?window.location.hash.split('#')[1].split(','):'';let h1=(hash.length>=1)?hash[0].toLowerCase():'';let h2=(hash.length>=2)?hash[1].toLowerCase():'';Vue.component('partabs',{template:`
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
             <ul>
@@ -11,9 +11,9 @@ let url=new URL(document.URL);let rd=(url.searchParams.get("r"))?'https://'+url.
         </div>
 
     </div>
-    `,data(){return{chitabs:[]};},created(){this.chitabs=this.$children;},mounted(){this.hashActivate();},methods:{selectTab:function(selectedtab){this.chitabs.forEach(tab=>{tab.isActive=(tab.title==selectedtab.title);if(tab.title==selectedtab.title)
-tab.setChildActive();});},hashActivate:function(){if(hs!=''){this.chitabs.forEach(tab=>{if(tab.title.toLowerCase()==hs){tab.isActive=tab.selected=true;tab.setChildActive();}});}
-else{this.chitabs[0].isActive=this.chitabs[0].selected=true;this.chitabs[0].setChildActive();}}}});Vue.component('chitab',{template:`
+    `,data(){return{chitabs:[]};},created(){this.chitabs=this.$children;},mounted(){this.hashActivate();},methods:{selectTab:function(selectedtab){this.chitabs.forEach(tab=>{tab.isActive=(tab.title==selectedtab.title);if(tab.title==selectedtab.title){tab.setChildActive();}});},hashActivate:function(){if(h1!=''){this.chitabs.forEach(tab=>{if(tab.title.toLowerCase()==h1){tab.isActive=tab.selected=true;if(h2=='')
+tab.setChildActive();}});}
+else if(h1==''&&h2==''){this.chitabs[0].isActive=this.chitabs[0].selected=true;this.chitabs[0].setChildActive();}}}});Vue.component('chitab',{template:`
     <div v-show="isActive" class='tab-details'>
         <slot></slot>
     </div>
@@ -21,15 +21,17 @@ else{this.chitabs[0].isActive=this.chitabs[0].selected=true;this.chitabs[0].setC
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)">{{tab.title}}</a></li>
+                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.name.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
             <slot></slot>
         </div>
     </div>
-    `,data(){return{tabs:[],isActive:false};},created(){this.tabs=this.$children;},methods:{selectTab:function(selectedtab){this.tabs.forEach(tab=>{tab.isActive=(tab.name==selectedtab.name);if(!tab.isLoaded){if(tab.name==selectedtab.name){tab.setData();}}
-if(tab.name==selectedtab.name){tab.current=true;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
+    `,data(){return{tabs:[],isActive:false};},created(){this.tabs=this.$children;},mounted(){this.hashActivate()},methods:{selectTab:function(selectedtab){this.tabs.forEach(tab=>{tab.isActive=tab.current=(tab.name==selectedtab.name);if(tab.name==selectedtab.name){if(!tab.isLoaded){tab.setData();}
+tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},hashActivate:function(){if(h2!=''){this.tabs.forEach(tab=>{tabname=tab.name;console.log(h2,tabname);if(tabname==h2){tab.isActive=tab.current=(tabname==h2);if(tabname==h2){if(!tab.isLoaded){tab.setData();}
+tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}}});}
+else{this.tabs[0].isActive=this.tabs[0].selected=true;}},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
         <ul>
         <li v-for="link,index in this.linklist">
