@@ -30,7 +30,9 @@ function getContent(url, methodType = 'GET', callback) {
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
 let lg = (url.searchParams.get("l") === null) ? '' : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
-let hs = (window.location.hash != '') ? window.location.hash.split('#')[1].toLowerCase() : '';
+let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].toLowerCase() : '';
+let h1 = hash.split(',')[0];
+let h2 = hash.split(',')[1];
 
 Vue.component('partabs', {
     template: `
@@ -78,9 +80,9 @@ Vue.component('partabs', {
             });
         },
         hashActivate: function () {
-            if (hs != '') {
+            if (h1 != '') {
                 this.chitabs.forEach(tab => {
-                    if (tab.title.toLowerCase() == hs) {
+                    if (tab.title.toLowerCase() == h1) {
                         tab.isActive = tab.selected = true;
                         tab.setChildActive();
 
@@ -132,7 +134,7 @@ Vue.component('tabs', {
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)">{{tab.title}}</a></li>
+                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.title.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
@@ -158,8 +160,7 @@ Vue.component('tabs', {
                         tab.setData();
                     }
 
-                    tab.current = true;
-                    console.log(tab.name);
+                    tab.current = true;;
                     if (tab.isLoaded && tab.isActive && tab.current) {
                         tab.setVoice();
                     }
