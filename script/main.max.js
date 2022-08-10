@@ -153,7 +153,8 @@ Vue.component('tabs', {
         this.tabs = this.$children;
     },
     mounted() {
-        this.hashActivate()
+        if (h2.length > 1)
+            this.hashActivate();
     },
     methods: {
         selectTab: function (selectedtab) {
@@ -174,10 +175,13 @@ Vue.component('tabs', {
             if (h2 != '') {
                 this.tabs.forEach(tab => {
                     tabname = tab.name;
-                    console.log(h2, tabname);
+                    //Cannot just loop through current tab children for some reason.
+                    //Can change the mounted() function to updated() or beforeUpdate to get parent state to true or false 
+                    //but breaks
+                    //console.log(h2, tabname, tab.$parent.$parent.title, tab.$parent.$parent.selected, this.tabs.length);
+                    tab.isActive = tab.current = (tabname == h2);
                     if (tabname == h2) {
 
-                        tab.isActive = tab.current = (tabname == h2);
                         if (tabname == h2) {
                             if (!tab.isLoaded) {
                                 tab.setData();
@@ -188,7 +192,6 @@ Vue.component('tabs', {
                             }
                         }
                     }
-
                 });
             }
             else {

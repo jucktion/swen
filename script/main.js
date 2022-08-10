@@ -29,7 +29,7 @@ else if(h1==''&&h2==''){this.chitabs[0].isActive=this.chitabs[0].selected=true;t
         </div>
     </div>
     `,data(){return{tabs:[],isActive:false};},created(){this.tabs=this.$children;},mounted(){this.hashActivate()},methods:{selectTab:function(selectedtab){this.tabs.forEach(tab=>{tab.isActive=tab.current=(tab.name==selectedtab.name);if(tab.name==selectedtab.name){if(!tab.isLoaded){tab.setData();}
-tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},hashActivate:function(){if(h2!=''){this.tabs.forEach(tab=>{tabname=tab.name;console.log(h2,tabname);if(tabname==h2){tab.isActive=tab.current=(tabname==h2);if(tabname==h2){if(!tab.isLoaded){tab.setData();}
+tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},hashActivate:function(){if(h2!=''){this.tabs.forEach(tab=>{tabname=tab.name;if(tabname==h2){tab.isActive=tab.current=(tabname==h2);if(tabname==h2){if(!tab.isLoaded){tab.setData();}
 tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}}});}
 else{this.tabs[0].isActive=this.tabs[0].selected=true;}},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
