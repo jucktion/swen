@@ -135,7 +135,7 @@ Vue.component('tabs', {
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.name.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
+                <li v-for="tab in filterTab(tabs)" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+tab.tag.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
@@ -155,6 +155,8 @@ Vue.component('tabs', {
     mounted() {
         if (h2.length > 1)
             this.hashActivate();
+
+        this.filterTab(this.tabs);
     },
     methods: {
         selectTab: function (selectedtab) {
@@ -170,6 +172,13 @@ Vue.component('tabs', {
                     }
                 }
             });
+        },
+        filterTab: function (tabs) {
+            //tabs[0].name = '';
+            this.tags = this.tabs;
+            this.tags.forEach((tab, index) => { tab.tag = (index == 0) ? '' : ',' + tab.name; });
+
+            return this.tags;
         },
         hashActivate: function () {
             if (h2 != '') {
