@@ -21,15 +21,16 @@ else if(h1==''&&h2==''){this.chitabs[0].isActive=this.chitabs[0].selected=true;t
     <div class="content childcontent">
         <div class="tabs child is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in tabs" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+','+tab.name.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
+                <li v-for="tab in filterTab(tabs)" :class="{'is-active': tab.isActive}"><a :href="'#'+tab.$parent.$parent.title.toLowerCase()+tab.tag.toLowerCase()" @click="selectTab(tab)">{{tab.title}}</a></li>
             </ul>
         </div>
         <div class='tab-details'>
             <slot></slot>
         </div>
     </div>
-    `,data(){return{tabs:[],isActive:false};},created(){this.tabs=this.$children;},mounted(){this.hashActivate()},methods:{selectTab:function(selectedtab){this.tabs.forEach(tab=>{tab.isActive=tab.current=(tab.name==selectedtab.name);if(tab.name==selectedtab.name){if(!tab.isLoaded){tab.setData();}
-tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},hashActivate:function(){if(h2!=''){this.tabs.forEach(tab=>{tabname=tab.name;if(tabname==h2){tab.isActive=tab.current=(tabname==h2);if(tabname==h2){if(!tab.isLoaded){tab.setData();}
+    `,data(){return{tabs:[],isActive:false};},created(){this.tabs=this.$children;},mounted(){if(h2.length>1)
+this.hashActivate();this.filterTab(this.tabs);},methods:{selectTab:function(selectedtab){this.tabs.forEach(tab=>{tab.isActive=tab.current=(tab.name==selectedtab.name);if(tab.name==selectedtab.name){if(!tab.isLoaded){tab.setData();}
+tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}});},filterTab:function(tabs){this.tags=this.tabs;this.tags.forEach((tab,index)=>{tab.tag=(index==0)?'':','+tab.name;});return this.tags;},hashActivate:function(){if(h2!=''){this.tabs.forEach(tab=>{tabname=tab.name;tab.isActive=tab.current=(tabname==h2);if(tabname==h2){if(tabname==h2){if(!tab.isLoaded){tab.setData();}
 tab.current=true;;if(tab.isLoaded&&tab.isActive&&tab.current){tab.setVoice();}}}});}
 else{this.tabs[0].isActive=this.tabs[0].selected=true;}},selectDef:function(){this.selectTab(this.$children[0]);}}});Vue.component('tab',{template:`
     <div :id="this.name.toLowerCase()" v-show="isActive" class='tab-details'>
