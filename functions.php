@@ -139,14 +139,15 @@ function parseXML($feed, $domain, $test = false, $json = false){
             foreach ($xml->channel->item  as $v) {
                 $arr[$k]['title'] = (string)$v->title;
                 $arr[$k]['url'] = (string)$v->link;
+                
 
                 //check comments link for ycombinator only
-                $customdomains = ['ycombinator','lobsters','lemmytech'];
+                $customdomains = ['ycombinator','lobsters'];
                 if (in_array($domain,$customdomains)) {
                     if ($v->comments) {
                         $arr[$k]['com'] = (string)$v->comments;
                     }
-                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters' || str_contains($domain, 'lemmy')) ? 'L' : ''));
+                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : ''));
                 }
                 $k++;
                 if ($k == $limit) break;
