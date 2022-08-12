@@ -141,11 +141,12 @@ function parseXML($feed, $domain, $test = false, $json = false){
                 $arr[$k]['url'] = (string)$v->link;
 
                 //check comments link for ycombinator only
-                if ($domain == 'ycombinator' || $domain == 'lobsters') {
+                $customdomains = ['ycombinator','lobsters','lemmytech'];
+                if (in_array($domain,$customdomains)) {
                     if ($v->comments) {
                         $arr[$k]['com'] = (string)$v->comments;
                     }
-                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : ''));
+                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters' || str_contains($domain, 'lemmy')) ? 'L' : ''));
                 }
                 $k++;
                 if ($k == $limit) break;
