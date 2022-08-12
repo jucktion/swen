@@ -20,7 +20,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     # Parse Reddit subs
     # Array with the list of subs to fetch
     #
-    $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel'];
+    $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel', 'privacy'];
     parseReddit($subs);
 
     #
@@ -48,6 +48,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://techxplore.com/rss-feed/','techx');
     parseFeed('https://css-tricks.com/feed/','csstricks');
     parseFeed('https://lobste.rs/top/rss','lobsters');
+    parseFeed('https://lemmy.ml/feeds/c/technology.xml?sort=Hot','lemmytech');
 
 }
 $etime = microtime(true);
