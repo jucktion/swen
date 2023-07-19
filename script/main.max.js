@@ -29,7 +29,7 @@ function getContent(url, methodType = 'GET', callback) {
 // Not used in a vue component because this only needs to happen once.
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
-let lg = (url.searchParams.get("l") === null) ? '' : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
+let lang = (url.searchParams.get("l") === null) ? navigator.language : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
 let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].split(',') : '';
 let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : '';
 let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : '';
@@ -222,9 +222,9 @@ Vue.component('tab', {
         <ul>
         <li v-for="link,index in this.linklist">
         <span class="itm">{{index+1}}</span>
-        <a v-if="link.rurl" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
-        <a v-if="link.com" target="_blank" :href="link.com">[{{link.score}}]</a>
-        <a target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
+        <a v-if="link.rurl" rel="noopener, noreferrer" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
+        <a v-if="link.com" rel="noopener, noreferrer" target="_blank" :href="link.com">[{{link.score}}]</a>
+        <a  rel="noopener, noreferrer" target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>
@@ -324,8 +324,8 @@ Vue.component('voice', {
         <label for="separator">Separator</label><input v-model="separator" :value='separator'></input>
         </div>
         <div>
-        <label for="startItem">Start</label><input v-model.number="startItem" type="number" min="1" max="99" :value='startItem' size="2"></input>
-        <label for="endItem">End</label><input v-model.number="endItem" type="number" min="2" max="100" :value='endItem' size="2"></input>
+        <label for="startItem">Start: </label><span v-text="startItem">1</span><input v-model.number="startItem" type="range" min="1" :max="endItem" :value='startItem' size="2"></input>
+        <label for="endItem">End: </label><span v-text="endItem ">1</span><input v-model.number="endItem" type="range" :min="startItem" max="25" :value='endItem' size="1"></input>
         </div>
     </form>
 </div>
@@ -384,7 +384,7 @@ Vue.component('voice', {
             //s.then((voices) => console.log(voices)); 
             s.then((voices) => {
                 this.voices = (lg) ? voices.filter(function (voice) {
-                    return voice.lang.indexOf(lg) != -1;
+                    return voice.lang.indexOf(lang) != -1;
                 }) : voices;
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
             });

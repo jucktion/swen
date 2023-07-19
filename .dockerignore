@@ -1,0 +1,8 @@
+temp/*.json
+vendor
+test*
+.git
+**/*~
+**/*.log
+**/.DS_Store
+**/Thumbs.db

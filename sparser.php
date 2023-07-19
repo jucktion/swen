@@ -37,10 +37,10 @@ function kathmandupost(){
 
 //himalayantimes
 function himalayantimes(){
-    $data = getUrl('https://thehimalayantimes.com/nepal');
+    $data = getUrl('http://thehimalayantimes.com/nepal');
     $arr = array();
 
-    #echo $parsed;
+    #echo $data;
     $html = new simple_html_dom();
 
     $html->load($data);
@@ -72,7 +72,7 @@ function bbcnp(){
     $html->load($data);
     #var_dump($html);
     #foreach ($html->find('h3[class*="-Headline"]') as $k => $article) {
-    foreach ($html->find('main h3 a[href*="/nepali/news-"]') as $k => $article) {
+    foreach ($html->find('main h3 a[href*="/nepali/articles"]') as $k => $article) {
         // $title = $article->find('a',0)->plaintext;
         // $link = $article->find('a',0)->href;
         // echo $title,'<br>', $link,'<br><br>';
@@ -154,5 +154,5 @@ kathmandupost();
 himalayantimes();
 bbcnp();
 sharesansarIPO();
-parseQFX();
+#parseQFX();
 }

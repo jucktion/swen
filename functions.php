@@ -12,10 +12,10 @@ function getUrl($base)
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-    curl_setopt($ch, CURLOPT_REFERER, $base);
+    // curl_setopt($ch, CURLOPT_REFERER, $base);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.25');
     $str = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
@@ -147,7 +147,7 @@ function parseXML($feed, $domain, $test = false, $json = false){
                     if ($v->comments) {
                         $arr[$k]['com'] = (string)$v->comments;
                     }
-                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : ''));
+                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : (($domain == 'lemmytech') ? 'L' : '')));
                 }
                 $k++;
                 if ($k == $limit) break;
