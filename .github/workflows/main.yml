@@ -12,11 +12,22 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
     - name: execute regular PHP Script
       run: php feed.php k=
+    - name: Wait for completion
+      run: |
+        while pgrep php > /dev/null; do
+          sleep 5
+        done
     - name: execute Nepali PHP Script parser
       run: php sparser.php k=
+    - name: Wait for completion
+      run: |
+        while pgrep php > /dev/null; do
+          sleep 5
+        done
     - name: commit files
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
