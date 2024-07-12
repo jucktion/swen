@@ -1,6 +1,6 @@
 <?php
 $key = !empty(strval(getenv('SWEN_KEY'))) ? strval(getenv('SWEN_KEY')) : '';
-if (isset($_GET['k']) && $_GET['k'] == $key){
+if (!empty($key)){
 include_once 'functions.php';
 include_once 'simple_html_dom.php';
 
