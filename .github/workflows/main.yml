@@ -15,9 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: execute regular PHP Script
-      run: php ./feed.php k=${{ secrets.SWEN_KEY }}
+      run: php -q ./feed.php k=${{ secrets.SWEN_KEY }}
     - name: execute Nepali PHP Script parser
-      run: php ./sparser.php k=${{ secrets.SWEN_KEY }}
+      run: php -q sparser.php k=${{ secrets.SWEN_KEY }}
     - name: commit files
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
