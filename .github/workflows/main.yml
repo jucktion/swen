@@ -12,9 +12,9 @@ jobs:
       with:
         php-version: '8.3'
     - name: execute regular PHP Script
-      run: php feed.php?k=
+      run: php feed.php k=
     - name: execute Nepali PHP Script parser
-      run: php sparser.php?k=
+      run: php sparser.php k=
     - name: commit files
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
