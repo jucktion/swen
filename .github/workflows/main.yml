@@ -1,8 +1,6 @@
 name: Run the PHP parser
 on:
   workflow_dispatch:
-  schedule:
-   - cron: "0 */1 * * *"
 permissions: write-all
 jobs:
   cron:
@@ -15,19 +13,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: execute regular PHP Script
-      run: php feed.php k=
-    - name: Wait for completion
-      run: |
-        while pgrep php > /dev/null; do
-          sleep 5
-        done
+      run: php ./feed.php k=
     - name: execute Nepali PHP Script parser
-      run: php sparser.php k=
-    - name: Wait for completion
-      run: |
-        while pgrep php > /dev/null; do
-          sleep 5
-        done
+      run: php ./sparser.php k=
     - name: commit files
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
