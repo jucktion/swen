@@ -55,4 +55,7 @@ $etime = microtime(true);
 $exc_time = ($etime - $stime);
 echo "<p>Script completed in ".$exc_time." sec</p>";
 }
+else{
+echo "Wrong code";
 die();
+}
