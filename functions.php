@@ -15,7 +15,7 @@ function getUrl($base)
     // curl_setopt($ch, CURLOPT_REFERER, $base);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.25');
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0');
     $str = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
@@ -64,7 +64,7 @@ function parseReddit($subs)
 #
 function parseStore($subs)
 {
-    $top = 'https://reddit.com/r/' . $subs . '/top.json';
+    $top = 'https://old.reddit.com/r/' . $subs . '/top.json';
     try {
         $lv = getUrl($top);
     } catch (Exception $e) {
