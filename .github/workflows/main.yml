@@ -2,6 +2,8 @@ name: Run the PHP parser
 on:
   workflow_dispatch:
 permissions: write-all
+env: # Or as an environment variable
+      SWEN_KEY: ${{ secrets.SWEN_KEY }}
 jobs:
   cron:
     runs-on: ubuntu-latest
@@ -13,9 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: execute regular PHP Script
-      run: php ./feed.php k=
+      run: php ./feed.php k=${{ secrets.SWEN_KEY }}
     - name: execute Nepali PHP Script parser
-      run: php ./sparser.php k=
+      run: php ./sparser.php k=${{ secrets.SWEN_KEY }}
     - name: commit files
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
