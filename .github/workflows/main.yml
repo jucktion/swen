@@ -1,6 +1,8 @@
 name: Run the PHP parser
 on:
   workflow_dispatch:
+  schedule:
+   - cron: "0 */1 * * *"
 permissions: write-all
 env: # Or as an environment variable
       SWEN_KEY: ${{ secrets.SWEN_KEY }}
@@ -12,6 +14,10 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
+    - name: Delete files in temp folder
+      run: |
+        cd temp
+        rm -rf *
     - name: Checkout repository
       uses: actions/checkout@v4
     - name: execute regular PHP Script
