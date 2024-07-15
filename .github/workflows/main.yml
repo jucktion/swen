@@ -14,12 +14,12 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.3'
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: Delete files in temp folder
       run: |
         cd temp
         rm -rf *
-    - name: Checkout repository
-      uses: actions/checkout@v4
     - name: execute regular PHP Script
       run: php -q ./feed.php
     - name: execute Nepali PHP Script parser
