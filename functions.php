@@ -4,6 +4,8 @@ $limit = 25; //Feed post limit (only applies to feeds, not subreddits)
 $feedtime = 3600; //Time for feed to pass to be eligible for update
 $subtime = 1717;
 
+$agent = ['Twitterbot/1.0','facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)']
+
 function getUrl($base)
 {
     $ch = curl_init($base);
@@ -15,7 +17,7 @@ function getUrl($base)
     // curl_setopt($ch, CURLOPT_REFERER, $base);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0');
+    curl_setopt($ch, CURLOPT_USERAGENT, getUserAgent($agent));
     $str = curl_exec($ch);
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
@@ -30,6 +32,11 @@ function getUrl($base)
     return $ret;
 }
 $arr = array();
+
+function getUserAgent(array $array) {
+    $randomIndex = array_rand($array);
+    return $array[$randomIndex];
+}
 
 #First level of reddit sub parsing, get the subs, run the related functions
 function parseReddit($subs)
