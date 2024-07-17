@@ -25,17 +25,17 @@ jobs:
     - name: execute Nepali PHP Script parser
       run: php -q ./sparser.php
     - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: "html"
-          path: |
-            img
-            script
-            style
-            temp
-            index.html
-            favicon.svg
-            favicon.ico
+      uses: actions/upload-artifact@v2
+      with:
+        name: "html"
+        path: |
+          img
+          script
+          style
+          temp
+          index.html
+          favicon.svg
+          favicon.ico
 
   deploy:
     environment:
