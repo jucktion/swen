@@ -61,6 +61,7 @@ function parseReddit($subs)
                 echo "Error: ", $e->getMessage, '<br>';
             }
         }
+        usleep(500000);
     }
 }
 

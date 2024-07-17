@@ -34,11 +34,10 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
     parseFeed('https://www.newscientist.com/feed/home/','newscientist');
     parseFeed('https://feeds.bbci.co.uk/news/world/rss.xml');
-    parsefeed('https://www.npr.org/rss/rss.php?id=1001');
+    parsefeed('https://feeds.npr.org/1001/rss.xml', 'npr');
     parseFeed('https://www.theguardian.com/world/rss');
     parseFeed('https://www.onlinekhabar.com/feed');
     parseFeed('https://www.setopati.com/feed');
-    ParseFeed('https://redis.domcloud.io/app/f/ntc/i.xml','ntc');
     parseFeed('https://www.producthunt.com/feed','producthunt');
     parseFeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
     parseFeed('https://dev.to/feed/','devto');
