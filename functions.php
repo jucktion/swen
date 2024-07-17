@@ -18,6 +18,12 @@ function getUrl($base)
     curl_setopt($ch, CURLOPT_VERBOSE, 1);
     curl_setopt($ch, CURLOPT_USERAGENT, getUserAgent($agent));
     $str = curl_exec($ch);
+    
+    $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if ($http_status == 429) {
+        sleep(5);
+        $str = curl_exec($ch);
+    }
     if (curl_errno($ch)) {
         $error_msg = curl_error($ch);
     }
@@ -61,7 +67,6 @@ function parseReddit($subs)
                 echo "Error: ", $e->getMessage, '<br>';
             }
         }
-        sleep(3);
     }
 }
 
