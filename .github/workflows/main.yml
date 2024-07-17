@@ -2,7 +2,7 @@ name: Run the PHP parser
 on:
   workflow_dispatch:
   schedule:
-   - cron: "0 */1 * * *"
+   - cron: "0 */3 * * *"
 permissions: write-all
 env: # Or as an environment variable
       SWEN_KEY: ${{ secrets.SWEN_KEY }}
