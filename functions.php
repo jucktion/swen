@@ -4,7 +4,7 @@ $limit = 25; //Feed post limit (only applies to feeds, not subreddits)
 $feedtime = 3600; //Time for feed to pass to be eligible for update
 $subtime = 1717;
 
-$agent = ['Twitterbot/1.0','facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)']
+$agent = ['Twitterbot/1.0','facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)'];
 
 function getUrl($base)
 {
