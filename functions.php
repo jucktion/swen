@@ -20,7 +20,7 @@ function getUrl($base)
     $str = curl_exec($ch);
     
     $http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    if ($http_status == 429) {
+    if ((int)$http_status == 429) {
         sleep(5);
         $str = curl_exec($ch);
     }
