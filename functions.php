@@ -33,6 +33,7 @@ function getUrl($base)
     curl_close($ch);
 
     if (isset($error_msg)) {
+        echo 'Tried: ' . $try . 'times';
         echo $error_msg;
     }
     $invalid_characters = '/[^\x9\xa\x20-\xD7FF\xE000-\xFFFD]/';
