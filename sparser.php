@@ -31,8 +31,7 @@ function kathmandupost(){
     $arr[$k]['url'] = 'https://kathmandupost.com' . $article->find('a',0)->href;
     // echo $article->plaintext, '<br>';
     }
-    $domain = 'kathmandupost';
-    write_json($domain, $arr);
+    write_json('kathmandupost', $arr);
 }
 
 //himalayantimes
@@ -57,8 +56,7 @@ function himalayantimes(){
         $arr[$k]['url'] = $article->find('a',0)->href;
         // echo $article->plaintext, '<br>';
     }
-    $domain = 'himalayantimes';
-    write_json($domain, $arr);
+    write_json('himalayantimes', $arr);
 }
 
 //BBC
@@ -78,11 +76,11 @@ function bbcnp(){
         // echo $title,'<br>', $link,'<br><br>';
 
         $arr[$k]['title'] = $article->plaintext;
-        $arr[$k]['url'] = 'https://bbc.com'. $article->href;
+        $arr[$k]['url'] = $article->href;
         // echo $article->plaintext, '<br>';
     }
-    $domain = 'bbcnp';
-    write_json($domain, $arr);
+
+    write_json('bbcnp', $arr);
 }
 
 function QFX()
@@ -146,8 +144,7 @@ function sharesansarIPO(){
             $arr[$k]['url'] = $article->href;
             // echo $article->plaintext, '<br>';
         }
-        $domain = 'npipo';
-        write_json($domain, $arr);
+        write_json('npipo', $arr);
     }
 
 kathmandupost();
