@@ -148,8 +148,8 @@ function sharesansarIPO(){
     }
 
 kathmandupost();
-himalayantimes();
 bbcnp();
 sharesansarIPO();
-#parseQFX();
+// himalayantimes();
+// parseQFX();
 }
