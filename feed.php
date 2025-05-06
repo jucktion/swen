@@ -29,6 +29,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     #
     parseFeed('https://hnrss.org/frontpage', 'ycombinator');
     parseFeed('https://techcrunch.com/feed/', 'techcrunch');
+    parseFeed('https://bridge.easter.fr/?action=display&bridge=ReutersBridge&feed=world&format=Mrss','reuters');
     parseFeed('https://feeds.bbci.co.uk/news/science_and_environment/rss.xml', 'bbcsci');
     parseFeed('https://feeds.bbci.co.uk/news/technology/rss.xml', 'bbctech');
     parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
