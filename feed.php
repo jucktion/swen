@@ -20,7 +20,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     # Parse Reddit subs
     # Array with the list of subs to fetch
     #
-    $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel', 'privacy'];
+    $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'nepalsocial', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel', 'privacy'];
     parseReddit($subs);
 
     #
