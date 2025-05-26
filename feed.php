@@ -38,6 +38,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parsefeed('https://feeds.npr.org/1001/rss.xml', 'npr');
     parseFeed('https://www.theguardian.com/world/rss');
     parseFeed('https://www.onlinekhabar.com/feed');
+    parseFeed('https://nagariknews.nagariknetwork.com/feed');
     parseFeed('https://www.ratopati.com/feed');
     parseFeed('https://www.ukeraa.com/feed/');
     parseFeed('https://www.producthunt.com/feed','producthunt');
