@@ -35,7 +35,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('http://feeds.nature.com/nature/rss/current?format=xml', 'nature');
     parseFeed('https://www.newscientist.com/feed/home/','newscientist');
     parseFeed('https://feeds.bbci.co.uk/news/world/rss.xml');
-    parseFeed('https://bizmandu.com/feed');
+    parseFeed('https://siftrss.com/f/q8Xq030oedg','bizmandu');
     parsefeed('https://feeds.npr.org/1001/rss.xml', 'npr');
     parseFeed('https://www.theguardian.com/world/rss');
     parseFeed('https://siftrss.com/f/59wmqjAan1R','onlinekhabar');
