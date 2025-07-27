@@ -52,6 +52,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://css-tricks.com/feed/','csstricks');
     parseFeed('https://lobste.rs/top/rss','lobsters');
     parseFeed('https://lemmy.ml/feeds/c/technology.xml?sort=Hot','lemmytech');
+    parseFeed('https://kite.kagi.com/world.xml','kiteworld');
     parseFeed('https://kite.kagi.com/science.xml','kitescience');
     parseFeed('https://kite.kagi.com/gaming.xml','kitegaming');
 
