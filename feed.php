@@ -20,7 +20,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     # Parse Reddit subs
     # Array with the list of subs to fetch
     #
-    $subs = ['technology', 'science', 'worldnews', 'todayilearned', 'programming', 'nepal', 'nepalsocial', 'android', 'damnthatsinteresting', 'publicfreakout', 'lifeprotips', 'interestingasfuck', 'nextfuckinglevel', 'privacy'];
+    $subs = ['technology','science','worldnews','todayilearned','programming','pcgaming','linux_gaming','nepal+technepal+pokhara+ioenepal','nepalsocial','android','damnthatsinteresting','publicfreakout','oddlysatisfying','lifeprotips','interestingasfuck','nextfuckinglevel','privacy'];
     parseReddit($subs);
 
     #
@@ -55,6 +55,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://kite.kagi.com/world.xml','kiteworld');
     parseFeed('https://kite.kagi.com/science.xml','kitescience');
     parseFeed('https://kite.kagi.com/gaming.xml','kitegaming');
+
 
 }
 $etime = microtime(true);
