@@ -95,8 +95,7 @@ function parseStore($subs)
             $arr[$k]['url'] = $v['data']['url'];
             $arr[$k]['rurl'] = $v['data']['permalink'];
             $arr[$k]['score'] = $v['data']['score'];
-                        // $arr[$k]['user'] = $v['data']['name'];
-            // $arr[$k]['image'] = $v['data']['thumbnail'];
+            // $arr[$k]['img'] = $v['data']['thumbnail'];
             // echo '<a href="'.$d['data']['url'].'">'.$d['data']['title'].'</a> via:<a href="'.$d['data']['permalink'].'">'.$d['data']['name'].'</a></br>';
         }
         $jd = json_encode($arr);
@@ -190,16 +189,7 @@ function parseXML($feed, $domain, $test = false, $json = false){
                     $arr[$k]['rurl'] = $v['comments'];
                     $arr[$k]['score'] = 'Y';
                 }
-
             }
-            //Image code
-            // if (strpos($v['description'],'.jpg') >0){
-            //     $re = '/https:\/\/.*.jpg/m';
-            //     preg_match_all($re, $n->nodeValue, $matches, PREG_SET_ORDER, 0);
-            //     $arr[$k]['image'] = $matches[0];
-            // }
-            // $v['description'];
-            // //echo $item['title'];
         }
         //var_dump($arr);
         if(isset($arr)){

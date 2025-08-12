@@ -56,7 +56,6 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://kite.kagi.com/science.xml','kitescience');
     parseFeed('https://kite.kagi.com/gaming.xml','kitegaming');
 
-
 }
 $etime = microtime(true);
 $exc_time = ($etime - $stime);
