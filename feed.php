@@ -40,6 +40,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://www.theguardian.com/world/rss');
     parseFeed('https://siftrss.com/f/59wmqjAan1R','onlinekhabar');
     parseFeed('https://nagariknews.nagariknetwork.com/feed');
+    parseFeed('https://english.ratopati.com/feed', 'ratopati-en');
     parseFeed('https://www.ratopati.com/feed');
     parseFeed('https://www.ukeraa.com/feed/');
     parseFeed('https://www.producthunt.com/feed','producthunt');
