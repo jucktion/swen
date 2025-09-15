@@ -34,12 +34,12 @@ let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].spl
 let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : '';
 let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : '';
 
-Vue.component('partabs', {
+Vue.component('tablet', {
     template: `
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
+                <li v-for="tab in parents" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
             </ul>
         </diV>
         <div class='tab-details'>
@@ -50,11 +50,11 @@ Vue.component('partabs', {
     `,
     data() {
         return {
-            chitabs: []
+            parents: []
         };
     },
     created() {
-        this.chitabs = this.$children;
+        this.parents = this.$children;
 
     },
     mounted() {
@@ -62,12 +62,12 @@ Vue.component('partabs', {
     },
     methods: {
         selectTab: function (selectedtab) {
-            this.chitabs.forEach(tab => {
+            this.parents.forEach(tab => {
                 tab.isActive = (tab.title == selectedtab.title);
                 //
                 //  This simulates function execution, one after another through the heirarchy
-                //1. Loops through titles on 'chitab' component, if it matches the one clicked
-                //  a.Executes the setChildActive() function in 'chitab' component
+                //1. Loops through titles on 'parent' component, if it matches the one clicked
+                //  a.Executes the setChildActive() function in 'parent' component
                 //2. setChildActive() then follows through to execute selectDef() function on the first child in 'tabs' component
                 //  a.selectDef uses the selectTab() function with the first child element of its 'tab' component
                 //  b.which simulates clicking of the first tab in the 'tab' component
@@ -81,7 +81,7 @@ Vue.component('partabs', {
         },
         hashActivate: function () {
             if (h1 != '') {
-                this.chitabs.forEach(tab => {
+                this.parents.forEach(tab => {
                     if (tab.title.toLowerCase() == h1) {
                         tab.isActive = tab.selected = true;
                         if (h2 == '')
@@ -92,8 +92,8 @@ Vue.component('partabs', {
                 });
             }
             else if (h1 == '' && h2 == '') {
-                this.chitabs[0].isActive = this.chitabs[0].selected = true;
-                this.chitabs[0].setChildActive();
+                this.parents[0].isActive = this.parents[0].selected = true;
+                this.parents[0].setChildActive();
             }
 
         }
@@ -101,7 +101,7 @@ Vue.component('partabs', {
     }
 
 });
-Vue.component('chitab', {
+Vue.component('parent', {
     template: `
     <div v-show="isActive" class='tab-details'>
         <slot></slot>

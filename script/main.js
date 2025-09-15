@@ -1,10 +1,10 @@
-Vue.config.devtools = true; function getContent(url, methodType = 'GET', callback) { let xhr = new XMLHttpRequest(); xhr.open(methodType, url, true); xhr.send(); xhr.onreadystatechange = function () { if (xhr.readyState === 4) { if (xhr.status === 200) { let resp = xhr.responseText; if (typeof callback === "function") { callback.apply(xhr); } } else { } } else { } } }
-let url = new URL(document.URL); let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com'; let lg = (url.searchParams.get("l") === null) ? navigator.language : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : ''; let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].split(',') : ''; let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : ''; let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : ''; Vue.component('partabs', {
+function getContent(url, methodType = 'GET', callback) { let xhr = new XMLHttpRequest(); xhr.open(methodType, url, true); xhr.send(); xhr.onreadystatechange = function () { if (xhr.readyState === 4) { if (xhr.status === 200) { let resp = xhr.responseText; if (typeof callback === "function") { callback.apply(xhr); } } else { } } else { } } }
+let url = new URL(document.URL); let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com'; let lg = (url.searchParams.get("l") === null) ? navigator.language : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : ''; let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].split(',') : ''; let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : ''; let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : ''; Vue.component('tablet', {
     template: `
     <div>
         <div class="tabs is-centered is-toggle navbar is-toggle-rounded">
             <ul>
-                <li v-for="tab in chitabs" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
+                <li v-for="tab in parents" :class="{'is-active': tab.isActive}"><a @click="selectTab(tab)" :href="'#'+tab.title.toLowerCase()">{{tab.title}}</a></li>
             </ul>
         </diV>
         <div class='tab-details'>
@@ -12,20 +12,20 @@ let url = new URL(document.URL); let rd = (url.searchParams.get("r")) ? 'https:/
         </div>
 
     </div>
-    `, data() { return { chitabs: [] }; }, created() { this.chitabs = this.$children; }, mounted() { this.hashActivate(); }, methods: {
-        selectTab: function (selectedtab) { this.chitabs.forEach(tab => { tab.isActive = (tab.title == selectedtab.title); if (tab.title == selectedtab.title) { tab.setChildActive(); } }); }, hashActivate: function () {
+    `, data() { return { parents: [] }; }, created() { this.parents = this.$children; }, mounted() { this.hashActivate(); }, methods: {
+        selectTab: function (selectedtab) { this.parents.forEach(tab => { tab.isActive = (tab.title == selectedtab.title); if (tab.title == selectedtab.title) { tab.setChildActive(); } }); }, hashActivate: function () {
             if (h1 != '') {
-                this.chitabs.forEach(tab => {
+                this.parents.forEach(tab => {
                     if (tab.title.toLowerCase() == h1) {
                         tab.isActive = tab.selected = true; if (h2 == '')
                             tab.setChildActive();
                     }
                 });
             }
-            else if (h1 == '' && h2 == '') { this.chitabs[0].isActive = this.chitabs[0].selected = true; this.chitabs[0].setChildActive(); }
+            else if (h1 == '' && h2 == '') { this.parents[0].isActive = this.parents[0].selected = true; this.parents[0].setChildActive(); }
         }
     }
-}); Vue.component('chitab', {
+}); Vue.component('parent', {
     template: `
     <div v-show="isActive" class='tab-details'>
         <slot></slot>

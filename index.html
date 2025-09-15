@@ -10,8 +10,8 @@
 </head>
 <body>
 <div id=app class=section>
-<partabs>
-<chitab title=News>
+<tablet>
+<parent title=News>
 <tabs>
 <tab name=kiteworld title=Kite></tab>
 <tab name=positive title=GoodNews></tab>
@@ -22,18 +22,18 @@
 <tab name=worldnews title=WorldNews></tab>
 <tab name=reuters title=Reuters></tab>
 </tabs>
-</chitab>
-<chitab title=Science>
+</parent>
+<parent title=Science>
 <tabs>
+<tab name=nature title=Nature></tab>	
 <tab name=newscientist title=NewScientist></tab>
-<tab name=nature title=Nature></tab>
 <tab name=bbcsci title=BBC></tab>
 <tab name=medx title=MedX></tab>
 <tab name=kitescience title=Kite></tab>
 <tab name=science title=Science></tab>
 </tabs>
-</chitab>
-<chitab title=Tech>
+</parent>
+<parent title=Tech>
 <tabs>
 <tab name=technology title=Tech></tab>
 <tab name=ycombinator title=Hackernews></tab>
@@ -46,28 +46,28 @@
 <tab name=android title=Android></tab>
 <tab name=producthunt title=ProductHunt></tab>
 </tabs>
-</chitab>
-<chitab title=Gaming>
+</parent>
+<parent title=Gaming>
 <tabs>
 <tab name=kitegaming title=Kite></tab>
 <tab name=pcgaming title=PC></tab>
 <tab name=linux_gaming title=Linux></tab>
 </tabs>
-</chitab>
-<chitab title=Code>
+</parent>
+<parent title=Code>
 <tabs>
 <tab name=programming title=Programming></tab>
 <tab name=csstricks title=CSS></tab>
 <tab name=devto title=DevTo></tab>
 <tab name=fcc title=FreeCodeCamp></tab>
 </tabs>
-</chitab>
-<chitab title=Nepal>
+</parent>
+<parent title=Nepal>
 <tabs>
 <tab name=kathmandupost title=Kathmandupost></tab>
+<tab name=onlinekhabar title=Onlinekhabar></tab>
 <tab name=ratopati-en title=Ratopati(EN)></tab>
 <tab name=nagariknetwork title=Nagarik></tab>
-<tab name=onlinekhabar title=Onlinekhabar></tab>
 <tab name=ratopati title=Ratopati></tab>
 <tab name=ukeraa title=Ukeraa></tab>
 <tab name=bbcnp title=BBC></tab>
@@ -76,8 +76,8 @@
 <tab name=nepalsocial title=Social></tab>
 <tab name=npipo title=SS-IPO></tab>
 </tabs>
-</chitab>
-<chitab title=Interesting>
+</parent>
+<parent title=Interesting>
 <tabs>
 <tab name=damnthatsinteresting title=Interesting></tab>
 <tab name=lifeprotips title=Lifeprotips></tab>
@@ -87,8 +87,8 @@
 <tab name=oddlysatisfying title=Satisfying></tab>
 <tab name=publicfreakout title=Freakouts></tab>
 </tabs>
-</chitab>
-</partabs>
+</parent>
+</tablet>
 <voice></voice></div>
 <script src=script/vue.js></script>
 <script src=script/main.js></script>
