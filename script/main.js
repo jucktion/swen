@@ -30,9 +30,9 @@ function getContent(t,e="GET",s){let i=new XMLHttpRequest;i.open(e,t,!0),i.send(
         <ul>
         <li v-for="link,index in this.linklist">
         <span class="itm">{{index+1}}</span>
-        <a v-if="link.rurl" rel="noopener, noreferrer" target="_blank" :href="rd + link.rurl">[{{link.score}}]</a>
-        <a v-if="link.com" rel="noopener, noreferrer" target="_blank" :href="link.com">[{{link.score}}]</a>
-        <a  rel="noopener, noreferrer" target="_blank" :href="link.url">{{htmlDecode(link.title)}}</a><span class="del" @click="remove(index)">x</span></li>
+        <a v-if="link.r" rel="noopener, noreferrer" target="_blank" :href="rd + link.r">[{{link.s}}]</a>
+        <a v-if="link.c" rel="noopener, noreferrer" target="_blank" :href="link.c">[{{link.s}}]</a>
+        <a  rel="noopener, noreferrer" target="_blank" :href="link.u">{{htmlDecode(link.t)}}</a><span class="del" @click="remove(index)">x</span></li>
         </ul>
         <slot></slot>
     </div>

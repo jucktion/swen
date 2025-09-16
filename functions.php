@@ -91,10 +91,10 @@ function parseStore($subs)
         $data = json_decode($lv, true);
         $datad = $data['data']['children'];
         foreach ($datad as $k => $v) {
-            $arr[$k]['title'] = $v['data']['title'];
-            $arr[$k]['url'] = $v['data']['url'];
-            $arr[$k]['rurl'] = $v['data']['permalink'];
-            $arr[$k]['score'] = $v['data']['score'];
+            $arr[$k]['t'] = $v['data']['title'];
+            $arr[$k]['u'] = $v['data']['url'];
+            $arr[$k]['r'] = $v['data']['permalink'];
+            $arr[$k]['s'] = $v['data']['score'];
             // $arr[$k]['img'] = $v['data']['thumbnail'];
             // echo '<a href="'.$d['data']['url'].'">'.$d['data']['title'].'</a> via:<a href="'.$d['data']['permalink'].'">'.$d['data']['name'].'</a></br>';
         }
@@ -136,33 +136,32 @@ function parseXML($feed, $domain, $test = false, $json = false){
         $k =0;
         if($domain == "nature"){
             foreach ($xml->item as $v) {
-                $arr[$k]['title'] = (string)$v->title;
-                $arr[$k]['url'] = (string)$v->link;
+                $arr[$k]['t'] = (string)$v->title;
+                $arr[$k]['u'] = (string)$v->link;
                 $k++;
                 if ($k == $limit) break;
             }
         }
         elseif($domain == "producthunt"){
             foreach ($xml->entry as $v) {
-                $arr[$k]['title'] = (string)$v->title;
-                $arr[$k]['url'] = (string)$v->link['href'];
+                $arr[$k]['t'] = (string)$v->title;
+                $arr[$k]['u'] = (string)$v->link['href'];
                 $k++;
                 if ($k == $limit) break;
             }
         }
         else{ //Generic RSS parsing, limited to 25 entries
             foreach ($xml->channel->item  as $v) {
-                $arr[$k]['title'] = (string)$v->title;
-                $arr[$k]['url'] = (string)$v->link;
-                
+                $arr[$k]['t'] = (string)$v->title;
+                $arr[$k]['u'] = (string)$v->link;
 
                 //check comments link for ycombinator only
                 $customdomains = ['ycombinator','lobsters'];
                 if (in_array($domain,$customdomains)) {
                     if ($v->comments) {
-                        $arr[$k]['com'] = (string)$v->comments;
+                        $arr[$k]['c'] = (string)$v->comments;
                     }
-                    $arr[$k]['score'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : (($domain == 'lemmytech') ? 'L' : '')));
+                    $arr[$k]['s'] = ($domain == 'ycombinator' ? 'Y' : (($domain == 'lobsters') ? 'L' : (($domain == 'lemmytech') ? 'L' : '')));
                 }
                 $k++;
                 if ($k == $limit) break;
@@ -180,14 +179,14 @@ function parseXML($feed, $domain, $test = false, $json = false){
         $array = json_decode($json, true);
 
         foreach ($array as $k => $v) {
-            $arr[$k]['title'] = $v['title'];
-            $arr[$k]['url'] = $v['link'];
+            $arr[$k]['t'] = $v['title'];
+            $arr[$k]['u'] = $v['link'];
 
             //check comments link for yCombinator only
             if ($domain == 'ycombinator') {
                 if (isset($v['comments'])) {
-                    $arr[$k]['rurl'] = $v['comments'];
-                    $arr[$k]['score'] = 'Y';
+                    $arr[$k]['c'] = $v['comments'];
+                    $arr[$k]['s'] = 'Y';
                 }
             }
         }
