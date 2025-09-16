@@ -30,6 +30,7 @@ function getContent(url, methodType = 'GET', callback) {
 let url = new URL(document.URL);
 let rd = (url.searchParams.get("r")) ? 'https://' + url.searchParams.get("r") : 'https://reddit.com';
 let lang = (url.searchParams.get("l") === null) ? navigator.language : (url.searchParams.get("l") == '') ? navigator.language : (url.searchParams.get("l").length > 0) ? url.searchParams.get("l") : '';
+let speaker = url.searchParams.get("s") || '';
 let hash = (window.location.hash != '') ? window.location.hash.split('#')[1].split(',') : '';
 let h1 = (hash.length >= 1) ? hash[0].toLowerCase() : '';
 let h2 = (hash.length >= 2) ? hash[1].toLowerCase() : '';
@@ -309,23 +310,23 @@ Vue.component('voice', {
 <div v-if="settingsShown" id="vsettings">
 <span @click="settingsShown = !settingsShown" class="close">x</span>
     <form>
-        <select  v-model="selectedVoice">
+        <select name="voice" v-model="selectedVoice">
         <option v-for="(voice,index) in this.voices" :value="index" :data-lang="voice.lang" :data-name="voice.name">{{voice.name}}</option>
         </select>
         <div>
-          <label for="rate">Rate</label><input type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
+          <label for="rate">Rate</label><input id="rate" type="range" min="0.5" max="2" v-model="rate" step="0.1" id="rate">
           <span v-text="rate">1</span>
         </div>
         <div>
-          <label for="pitch">Pitch</label><input type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
+          <label for="pitch">Pitch</label><input id="pitch" type="range" min="0" max="2" v-model="pitch" step="0.1" id="pitch">
           <span v-text="pitch">1</span>
         </div>
         <div>
-        <label for="separator">Separator</label><input v-model="separator" :value='separator'></input>
+        <label for="separator">Separator</label><input id="separator" v-model="separator" :value='separator'></input>
         </div>
         <div>
-        <label for="startItem">Start: </label><span v-text="startItem">1</span><input v-model.number="startItem" type="range" min="1" :max="endItem" :value='startItem' size="2"></input>
-        <label for="endItem">End: </label><span v-text="endItem ">1</span><input v-model.number="endItem" type="range" :min="startItem" max="25" :value='endItem' size="1"></input>
+        <label for="startItem">Start: </label><span v-text="startItem">1</span><input id="startItem" v-model.number="startItem" type="range" min="1" :max="endItem" :value='startItem' size="2"></input>
+        <label for="endItem">End: </label><span v-text="endItem ">1</span><input id="endItem" v-model.number="endItem" type="range" :min="startItem" max="25" :value='endItem' size="1"></input>
         </div>
     </form>
 </div>
@@ -383,9 +384,11 @@ Vue.component('voice', {
             let s = setSpeech();
             //s.then((voices) => console.log(voices)); 
             s.then((voices) => {
-                this.voices = (lg) ? voices.filter(function (voice) {
+                this.voices = speaker && lang ? voices.filter(function (voice) {
+                    return voice.name.toLowerCase().indexOf(speaker.toLowerCase()) != -1;
+                }) : (lang ? voices.filter(function (voice) {
                     return voice.lang.indexOf(lang) != -1;
-                }) : voices;
+                }) : voices);
                 //this.voices.forEach(e=>{console.log(e.lang,e.name)});
             });
         },
