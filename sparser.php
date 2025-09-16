@@ -1,6 +1,6 @@
 <?php
 $key = !empty(strval(getenv('SWEN_KEY'))) ? strval(getenv('SWEN_KEY')) : '';
-if (!empty($key)){
+if (empty($key)){
 include_once 'functions.php';
 include_once 'simple_html_dom.php';
 
@@ -27,8 +27,8 @@ function kathmandupost(){
     // $link = $article->find('a',0)->href;
     // echo $title,'<br>', $link,'<br><br>';
 
-    $arr[$k]['title'] = $article->find('a h3',0)->plaintext;
-    $arr[$k]['url'] = 'https://kathmandupost.com' . $article->find('a',0)->href;
+    $arr[$k]['t'] = $article->find('a h3',0)->plaintext;
+    $arr[$k]['u'] = 'https://kathmandupost.com' . $article->find('a',0)->href;
     // echo $article->plaintext, '<br>';
     }
     write_json('kathmandupost', $arr);
@@ -52,8 +52,8 @@ function himalayantimes(){
         // $link = $article->find('a',0)->href;
         // echo $title,'<br>', $link,'<br><br>';
 
-        $arr[$k]['title'] = $article->find('a',0)->title;
-        $arr[$k]['url'] = $article->find('a',0)->href;
+        $arr[$k]['t'] = $article->find('a',0)->title;
+        $arr[$k]['u'] = $article->find('a',0)->href;
         // echo $article->plaintext, '<br>';
     }
     write_json('himalayantimes', $arr);
@@ -75,8 +75,8 @@ function bbcnp(){
         // $link = $article->find('a',0)->href;
         // echo $title,'<br>', $link,'<br><br>';
 
-        $arr[$k]['title'] = $article->plaintext;
-        $arr[$k]['url'] = $article->href;
+        $arr[$k]['t'] = $article->plaintext;
+        $arr[$k]['u'] = $article->href;
         // echo $article->plaintext, '<br>';
     }
 
@@ -96,10 +96,10 @@ function QFX()
     foreach ($data as $k => $v) {
         //echo $article->plaintext;
         //$date->sub(new DateInterval('PT4H3M2S'));
-        $arr[$k]['title'] = (array_key_exists('eventTypeID', $v)) ? 'Coming Soon: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES) : 'Showing: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES);
-        $arr[$k]['description'] = htmlspecialchars_decode($v['annotation'], ENT_QUOTES);
-        $arr[$k]['url'] = (isset($v['eventID'])) ? 'https://www.qfxcinemas.com/show?eventId=' . $v['eventID'] : '#';
-        $arr[$k]['image'] = 'https://api.qfxcinemas.com/' . $v['bannerUrl'];
+        $arr[$k]['t'] = (array_key_exists('eventTypeID', $v)) ? 'Coming Soon: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES) : 'Showing: ' . htmlspecialchars_decode($v['name'], ENT_QUOTES);
+        $arr[$k]['d'] = htmlspecialchars_decode($v['annotation'], ENT_QUOTES);
+        $arr[$k]['u'] = (isset($v['eventID'])) ? 'https://www.qfxcinemas.com/show?eventId=' . $v['eventID'] : '#';
+        $arr[$k]['i'] = 'https://api.qfxcinemas.com/' . $v['bannerUrl'];
     }
     $jd = json_encode($arr);
 
@@ -140,8 +140,8 @@ function sharesansarIPO(){
             // $link = $article->find('a',0)->href;
             // echo $title,'<br>', $link,'<br><br>';
     
-            $arr[$k]['title'] = $article->find('h4',0)->plaintext;
-            $arr[$k]['url'] = $article->href;
+            $arr[$k]['t'] = $article->find('h4',0)->plaintext;
+            $arr[$k]['u'] = $article->href;
             // echo $article->plaintext, '<br>';
         }
         write_json('npipo', $arr);
@@ -150,6 +150,6 @@ function sharesansarIPO(){
 kathmandupost();
 bbcnp();
 sharesansarIPO();
-// himalayantimes();
+himalayantimes();
 // parseQFX();
 }
