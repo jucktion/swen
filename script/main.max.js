@@ -395,7 +395,7 @@ Vue.component('voice', {
         speaker: function () {
             //https://github.com/mdn/web-speech-api/tree/master/speak-easy-synthesis
             if (this.saythis == null && !this.synth.speaking) {
-                this.speak = this.$root.voice.map(x => x.title);
+                this.speak = this.$root.voice.map(x => x.t);
                 this.saythis = this.speak.slice(this.startItem - 1, this.endItem).join(this.separator);
             }
 
