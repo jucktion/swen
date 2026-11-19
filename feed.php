@@ -43,7 +43,6 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://english.ratopati.com/feed', 'ratopati-en');
     parseFeed('https://www.ratopati.com/feed');
     parseFeed('https://www.ukeraa.com/feed/');
-    parseFeed('https://www.producthunt.com/feed','producthunt');
     parseFeed('https://rss.nytimes.com/services/xml/rss/nyt/World.xml');
     parseFeed('https://dev.to/feed/','devto');
     parseFeed('https://www.freecodecamp.org/news/rss/','fcc');
@@ -56,6 +55,7 @@ elseif (isset($_GET['f']) && isset($_GET['n'])) {
     parseFeed('https://kite.kagi.com/world.xml','kiteworld');
     parseFeed('https://kite.kagi.com/science.xml','kitescience');
     parseFeed('https://kite.kagi.com/gaming.xml','kitegaming');
+    parseFeed('https://lowendtalk.com/categories/offers/feed.rss','lowendtalk');
 
 }
 $etime = microtime(true);
